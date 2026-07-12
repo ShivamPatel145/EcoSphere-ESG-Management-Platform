@@ -33,12 +33,12 @@ type FormValues = {
 const CATEGORY_CONFIG: Record<string, { label: string; bg: string; text: string }> = {
   FUEL:        { label: 'Fuel',        bg: 'bg-orange-50', text: 'text-orange-700' },
   ELECTRICITY: { label: 'Electricity', bg: 'bg-yellow-50', text: 'text-yellow-700' },
-  MATERIAL:    { label: 'Material',    bg: 'bg-blue-50',   text: 'text-blue-700'   },
+  MATERIAL:    { label: 'Material',    bg: 'bg-pill-blue-bg',   text: 'text-pill-blue-fg'   },
   TRANSPORT:   { label: 'Transport',   bg: 'bg-violet-50', text: 'text-violet-700' },
 }
 
 function CategoryPill({ category }: { category: string }) {
-  const c = CATEGORY_CONFIG[category] ?? { label: category, bg: 'bg-gray-50', text: 'text-gray-600' }
+  const c = CATEGORY_CONFIG[category] ?? { label: category, bg: 'bg-canvas', text: 'text-ink-2' }
   return (
     <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${c.bg} ${c.text}`}>
       {c.label}
@@ -48,8 +48,8 @@ function CategoryPill({ category }: { category: string }) {
 
 function StatusBadge({ status }: { status: string }) {
   const s = status === 'ACTIVE'
-    ? { bg: 'bg-emerald-50', text: 'text-emerald-700' }
-    : { bg: 'bg-gray-100',   text: 'text-gray-500'   }
+    ? { bg: 'bg-pill-green-bg', text: 'text-pill-green-fg' }
+    : { bg: 'bg-surface-2',   text: 'text-ink-2'   }
   return (
     <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${s.bg} ${s.text}`}>
       {status === 'ACTIVE' ? 'Active' : 'Inactive'}
@@ -108,16 +108,16 @@ export default function EmissionFactorsPage() {
   const closeDrawer = () => { setDrawerOpen(false); setSelected(null) }
 
   return (
-    <div className="min-h-full bg-[#F7F6F1]">
+    <div className="min-h-full bg-canvas">
       {/* Page header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Emission Factors</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <h1 className="text-2xl font-semibold text-ink">Emission Factors</h1>
+          <p className="text-sm text-ink-2 mt-0.5">
             {isLoading ? '…' : `${factors.length} records`} · CO₂ equivalents per emission unit
           </p>
         </div>
-        <button onClick={openCreate} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#4F7A5A] text-white text-sm font-medium hover:bg-[#3d6147] transition-colors">
+        <button onClick={openCreate} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-primary text-white text-sm font-medium hover:bg-brand-primary-dark transition-colors">
           <Plus className="w-4 h-4" />
           New Factor
         </button>
@@ -125,40 +125,40 @@ export default function EmissionFactorsPage() {
 
       {/* Filter bar */}
       <div className="flex items-center gap-3 mb-4">
-        <div className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg flex-1 max-w-xs shadow-sm">
-          <Search className="w-4 h-4 text-gray-400 shrink-0" />
+        <div className="flex items-center gap-2 px-3 py-2 bg-surface border border-line rounded-lg flex-1 max-w-xs shadow-[0_1px_2px_rgba(31,41,55,.04)]">
+          <Search className="w-4 h-4 text-faint shrink-0" />
           <input
             type="text"
             placeholder="Search factor, category or source…"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="flex-1 text-sm bg-transparent outline-none placeholder:text-gray-400"
+            className="flex-1 text-sm bg-transparent outline-none placeholder:text-faint"
           />
-          {search && <button onClick={() => setSearch('')}><X className="w-3.5 h-3.5 text-gray-400" /></button>}
+          {search && <button onClick={() => setSearch('')}><X className="w-3.5 h-3.5 text-faint" /></button>}
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className="bg-surface rounded-xl border border-line shadow-[0_1px_2px_rgba(31,41,55,.04)] overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-100">
-              <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">Name</th>
-              <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">Category</th>
-              <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">Unit</th>
-              <th className="text-right text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">CO₂/Unit (kg)</th>
-              <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">Source</th>
-              <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">Status</th>
+            <tr className="border-b border-line-soft">
+              <th className="text-left text-xs font-semibold text-faint uppercase tracking-wider px-5 py-3">Name</th>
+              <th className="text-left text-xs font-semibold text-faint uppercase tracking-wider px-5 py-3">Category</th>
+              <th className="text-left text-xs font-semibold text-faint uppercase tracking-wider px-5 py-3">Unit</th>
+              <th className="text-right text-xs font-semibold text-faint uppercase tracking-wider px-5 py-3">CO₂/Unit (kg)</th>
+              <th className="text-left text-xs font-semibold text-faint uppercase tracking-wider px-5 py-3">Source</th>
+              <th className="text-left text-xs font-semibold text-faint uppercase tracking-wider px-5 py-3">Status</th>
               <th className="px-5 py-3" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
+          <tbody className="divide-y divide-line-soft">
             {isLoading ? (
               [...Array(5)].map((_, i) => (
                 <tr key={i}>
                   {[...Array(7)].map((_, j) => (
                     <td key={j} className="px-5 py-3.5">
-                      <div className="h-4 bg-gray-100 rounded animate-pulse w-3/4" />
+                      <div className="h-4 bg-surface-2 rounded animate-pulse w-3/4" />
                     </td>
                   ))}
                 </tr>
@@ -166,9 +166,9 @@ export default function EmissionFactorsPage() {
             ) : filtered.length === 0 ? (
               <tr>
                 <td colSpan={7} className="px-5 py-16 text-center">
-                  <div className="flex flex-col items-center gap-2 text-gray-400">
+                  <div className="flex flex-col items-center gap-2 text-faint">
                     <span className="text-4xl">🌱</span>
-                    <p className="text-sm font-medium text-gray-500">No emission factors found</p>
+                    <p className="text-sm font-medium text-ink-2">No emission factors found</p>
                     <p className="text-xs">Add your first factor to get started</p>
                   </div>
                 </td>
@@ -178,18 +178,18 @@ export default function EmissionFactorsPage() {
                 <tr
                   key={factor.id}
                   onClick={() => openEdit(factor)}
-                  className="hover:bg-[#F7F6F1] cursor-pointer transition-colors group"
+                  className="hover:bg-accent-soft cursor-pointer transition-colors group"
                 >
-                  <td className="px-5 py-3.5 font-medium text-gray-900">{factor.name}</td>
+                  <td className="px-5 py-3.5 font-medium text-ink">{factor.name}</td>
                   <td className="px-5 py-3.5"><CategoryPill category={factor.category} /></td>
-                  <td className="px-5 py-3.5 text-gray-600 font-mono text-xs">{factor.unit}</td>
-                  <td className="px-5 py-3.5 text-right font-semibold text-gray-900 font-mono">{Number(factor.co2PerUnit).toFixed(4)}</td>
-                  <td className="px-5 py-3.5 text-gray-500 text-xs">{factor.source ?? <span className="text-gray-300">—</span>}</td>
+                  <td className="px-5 py-3.5 text-ink-2 font-mono text-xs">{factor.unit}</td>
+                  <td className="px-5 py-3.5 text-right font-semibold text-ink font-mono">{Number(factor.co2PerUnit).toFixed(4)}</td>
+                  <td className="px-5 py-3.5 text-ink-2 text-xs">{factor.source ?? <span className="text-faint">—</span>}</td>
                   <td className="px-5 py-3.5"><StatusBadge status={factor.status} /></td>
                   <td className="px-5 py-3.5">
                     <button
                       onClick={e => { e.stopPropagation(); setDeleteTarget(factor) }}
-                      className="opacity-0 group-hover:opacity-100 p-1.5 rounded-md hover:bg-red-50 text-gray-400 hover:text-red-500 transition-all"
+                      className="opacity-0 group-hover:opacity-100 p-1.5 rounded-md hover:bg-pill-red-bg text-faint hover:text-pill-red-fg transition-all"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -205,14 +205,14 @@ export default function EmissionFactorsPage() {
       {drawerOpen && (
         <div className="fixed inset-0 z-50 flex">
           <div className="flex-1 bg-black/30 backdrop-blur-sm" onClick={closeDrawer} />
-          <div className="w-[460px] bg-white shadow-2xl flex flex-col h-full">
+          <div className="w-[460px] bg-surface shadow-2xl flex flex-col h-full">
             {/* Drawer header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-line-soft">
               <div>
-                <h2 className="text-base font-semibold text-gray-900">{selected ? 'Edit Emission Factor' : 'New Emission Factor'}</h2>
-                {selected && <p className="text-xs text-gray-400 mt-0.5">{selected.name}</p>}
+                <h2 className="text-base font-semibold text-ink">{selected ? 'Edit Emission Factor' : 'New Emission Factor'}</h2>
+                {selected && <p className="text-xs text-faint mt-0.5">{selected.name}</p>}
               </div>
-              <button onClick={closeDrawer} className="p-1.5 rounded-md hover:bg-gray-100 text-gray-400">
+              <button onClick={closeDrawer} className="p-1.5 rounded-md hover:bg-hover text-faint">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -221,20 +221,20 @@ export default function EmissionFactorsPage() {
             <form onSubmit={handleSubmit(v => saveMutation.mutate(v))} className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
               {/* Name */}
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-gray-700">Name <span className="text-red-500">*</span></label>
+                <label className="text-sm font-medium text-ink">Name <span className="text-pill-red-fg">*</span></label>
                 <input
                   {...register('name', { required: 'Name is required' })}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 transition"
+                  className="w-full px-3 py-2 text-sm border border-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 transition"
                   placeholder="e.g. Diesel combustion"
                 />
-                {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
+                {errors.name && <p className="text-xs text-pill-red-fg">{errors.name.message}</p>}
               </div>
 
               {/* Category + Status */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700">Category <span className="text-red-500">*</span></label>
-                  <select {...register('category')} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 bg-white transition">
+                  <label className="text-sm font-medium text-ink">Category <span className="text-pill-red-fg">*</span></label>
+                  <select {...register('category')} className="w-full px-3 py-2 text-sm border border-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 bg-surface transition">
                     <option value="FUEL">Fuel</option>
                     <option value="ELECTRICITY">Electricity</option>
                     <option value="MATERIAL">Material</option>
@@ -242,8 +242,8 @@ export default function EmissionFactorsPage() {
                   </select>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700">Status</label>
-                  <select {...register('status')} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 bg-white transition">
+                  <label className="text-sm font-medium text-ink">Status</label>
+                  <select {...register('status')} className="w-full px-3 py-2 text-sm border border-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 bg-surface transition">
                     <option value="ACTIVE">Active</option>
                     <option value="INACTIVE">Inactive</option>
                   </select>
@@ -253,50 +253,50 @@ export default function EmissionFactorsPage() {
               {/* Unit + CO2 */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700">Unit <span className="text-red-500">*</span></label>
+                  <label className="text-sm font-medium text-ink">Unit <span className="text-pill-red-fg">*</span></label>
                   <input {...register('unit', { required: 'Unit required' })} placeholder="e.g. L, kWh, kg, km"
-                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 transition" />
-                  {errors.unit && <p className="text-xs text-red-500">{errors.unit.message}</p>}
+                    className="w-full px-3 py-2 text-sm border border-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 transition" />
+                  {errors.unit && <p className="text-xs text-pill-red-fg">{errors.unit.message}</p>}
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700">kg CO₂e / Unit <span className="text-red-500">*</span></label>
+                  <label className="text-sm font-medium text-ink">kg CO₂e / Unit <span className="text-pill-red-fg">*</span></label>
                   <input type="number" step="0.0001" {...register('co2PerUnit', { required: true, valueAsNumber: true, validate: v => v > 0 || 'Must be > 0' })}
-                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 font-mono transition" />
-                  {errors.co2PerUnit && <p className="text-xs text-red-500">{errors.co2PerUnit.message}</p>}
+                    className="w-full px-3 py-2 text-sm border border-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 font-mono transition" />
+                  {errors.co2PerUnit && <p className="text-xs text-pill-red-fg">{errors.co2PerUnit.message}</p>}
                 </div>
               </div>
 
               {/* Source */}
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-gray-700">Source</label>
+                <label className="text-sm font-medium text-ink">Source</label>
                 <input {...register('source')} placeholder="e.g. DEFRA 2024, EPA"
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 transition" />
+                  className="w-full px-3 py-2 text-sm border border-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 transition" />
               </div>
 
               {/* Country + Date */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700">Country</label>
+                  <label className="text-sm font-medium text-ink">Country</label>
                   <input {...register('country')} placeholder="e.g. IN, UK, US"
-                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 transition" />
+                    className="w-full px-3 py-2 text-sm border border-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 transition" />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700">Effective Date</label>
+                  <label className="text-sm font-medium text-ink">Effective Date</label>
                   <input type="date" {...register('effectiveDate')}
-                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 transition" />
+                    className="w-full px-3 py-2 text-sm border border-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 transition" />
                 </div>
               </div>
             </form>
 
             {/* Drawer footer */}
-            <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3">
-              <button type="button" onClick={closeDrawer} className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+            <div className="px-6 py-4 border-t border-line-soft flex items-center justify-end gap-3">
+              <button type="button" onClick={closeDrawer} className="px-4 py-2 text-sm font-medium text-ink border border-line rounded-lg hover:bg-hover transition-colors">
                 Discard
               </button>
               <button
                 onClick={handleSubmit(v => saveMutation.mutate(v))}
                 disabled={saveMutation.isPending}
-                className="px-5 py-2 text-sm font-medium text-white bg-[#4F7A5A] rounded-lg hover:bg-[#3d6147] disabled:opacity-60 transition-colors"
+                className="px-5 py-2 text-sm font-medium text-white bg-brand-primary rounded-lg hover:bg-brand-primary-dark disabled:opacity-60 transition-colors"
               >
                 {saveMutation.isPending ? 'Saving…' : 'Save'}
               </button>
@@ -309,24 +309,24 @@ export default function EmissionFactorsPage() {
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setDeleteTarget(null)} />
-          <div className="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm mx-4">
+          <div className="relative bg-surface rounded-2xl shadow-2xl p-6 w-full max-w-sm mx-4">
             <div className="flex items-start gap-4">
-              <div className="p-2.5 bg-red-50 rounded-xl shrink-0">
-                <Trash2 className="w-5 h-5 text-red-500" />
+              <div className="p-2.5 bg-pill-red-bg rounded-xl shrink-0">
+                <Trash2 className="w-5 h-5 text-pill-red-fg" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">Delete Emission Factor</h3>
-                <p className="text-sm text-gray-500 mt-1">
-                  Delete <span className="font-medium text-gray-700">&ldquo;{deleteTarget.name}&rdquo;</span>? This cannot be undone.
+                <h3 className="font-semibold text-ink">Delete Emission Factor</h3>
+                <p className="text-sm text-ink-2 mt-1">
+                  Delete <span className="font-medium text-ink">&ldquo;{deleteTarget.name}&rdquo;</span>? This cannot be undone.
                 </p>
               </div>
             </div>
             <div className="flex justify-end gap-3 mt-6">
-              <button onClick={() => setDeleteTarget(null)} className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50">Cancel</button>
+              <button onClick={() => setDeleteTarget(null)} className="px-4 py-2 text-sm font-medium text-ink border border-line rounded-lg hover:bg-hover">Cancel</button>
               <button
                 onClick={() => deleteMutation.mutate(deleteTarget.id)}
                 disabled={deleteMutation.isPending}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-60"
+                className="px-4 py-2 text-sm font-medium text-white bg-pill-red-fg rounded-lg hover:brightness-95 disabled:opacity-60"
               >
                 {deleteMutation.isPending ? 'Deleting…' : 'Delete'}
               </button>

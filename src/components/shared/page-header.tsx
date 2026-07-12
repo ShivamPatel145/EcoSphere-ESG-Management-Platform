@@ -8,14 +8,12 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, subtitle, children }: PageHeaderProps) {
   return (
-    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-      <div className="min-w-0">
-        <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">
-          {title}
-        </h1>
-        {subtitle && <p className="mt-1 text-sm text-brand-muted">{subtitle}</p>}
+    <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-baseline sm:justify-between">
+      <div className="flex min-w-0 flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-2.5">
+        <h1 className="text-[20px] font-semibold text-ink">{title}</h1>
+        {subtitle && <p className="text-[12.5px] text-faint">{subtitle}</p>}
       </div>
-      {children && <div className="flex flex-wrap items-center gap-2">{children}</div>}
+      {children && <div className="flex flex-wrap items-center gap-2.5">{children}</div>}
     </div>
   )
 }

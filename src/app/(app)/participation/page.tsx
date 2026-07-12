@@ -117,7 +117,7 @@ export default function ParticipationPage() {
         <div className="mb-3 flex items-center gap-2">
           <h2 className="text-lg font-semibold text-brand-text">Approval Queue</h2>
           {pending.length > 0 && (
-            <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-800">
+            <span className="rounded-full bg-pill-amber-bg px-2 py-0.5 text-xs font-semibold text-pill-amber-fg">
               {pending.length} pending
             </span>
           )}
@@ -141,7 +141,7 @@ export default function ParticipationPage() {
 
       <section>
         <h2 className="mb-3 text-lg font-semibold text-brand-text">All Participations</h2>
-        <div className="rounded-xl border border-black/5 bg-white p-4">
+        <div className="rounded-xl border border-line bg-surface p-4">
           <DataTable columns={columns} data={rows} loading={isLoading} />
         </div>
       </section>

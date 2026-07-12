@@ -41,7 +41,7 @@ export default function AcknowledgementsPage() {
         title="Policy Acknowledgements"
         subtitle="A record of every policy acceptance across the organization."
       />
-      <div className="rounded-xl border border-black/5 bg-white p-4">
+      <div className="rounded-xl border border-line bg-surface p-4">
         <DataTable columns={columns} data={data} loading={isLoading} />
       </div>
     </div>

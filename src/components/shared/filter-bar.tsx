@@ -16,15 +16,15 @@ export function FilterBar({
   selectSlot,
 }: FilterBarProps) {
   return (
-    <div className="flex gap-3 items-center">
+    <div className="flex items-center gap-2.5">
       {searchSlot || (
-        <div className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md flex-1 bg-white">
-          <Search className="w-4 h-4 text-gray-400" />
+        <div className="flex h-[34px] flex-1 items-center gap-2 rounded-[7px] border border-line bg-surface px-2.5">
+          <Search className="h-4 w-4 text-faint" />
           <input
             type="text"
             placeholder={searchPlaceholder}
             onChange={(e) => onSearchChange?.(e.target.value)}
-            className="flex-1 outline-none text-sm"
+            className="flex-1 bg-transparent text-[12.5px] text-ink outline-none placeholder:text-faint"
           />
         </div>
       )}

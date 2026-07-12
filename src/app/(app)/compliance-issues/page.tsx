@@ -155,11 +155,11 @@ export default function ComplianceIssuesPage() {
       render: (v, r) => (
         <div className="flex items-start gap-2">
           {r.overdue && (
-            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" aria-label="Overdue" />
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-pill-red-fg" aria-label="Overdue" />
           )}
           <div>
-            <div className="font-medium text-brand-text">{v as string}</div>
-            {r.auditTitle && <div className="text-xs text-brand-muted">from {r.auditTitle}</div>}
+            <div className="font-medium text-ink">{v as string}</div>
+            {r.auditTitle && <div className="text-xs text-ink-2">from {r.auditTitle}</div>}
           </div>
         </div>
       ),
@@ -172,7 +172,7 @@ export default function ComplianceIssuesPage() {
       label: 'Due',
       sortable: true,
       render: (v, r) => (
-        <span className={r.overdue ? 'font-medium text-red-600' : 'text-brand-text'}>
+        <span className={r.overdue ? 'font-medium text-pill-red-fg' : 'text-ink'}>
           {formatDate(v as Date)}
           {r.overdue && <span className="ml-1 text-xs">({relativeDays(v as Date).label})</span>}
         </span>
@@ -191,7 +191,7 @@ export default function ComplianceIssuesPage() {
                 resolveMutation.mutate(r.id)
               }}
               disabled={busyId === r.id}
-              className="inline-flex items-center gap-1 rounded-md bg-brand-primary/10 px-2 py-1 text-xs font-semibold text-brand-primary-dark hover:bg-brand-primary/20 disabled:opacity-50"
+              className="inline-flex items-center gap-1 rounded-md bg-tint-green px-2 py-1 text-xs font-semibold text-pill-green-fg hover:brightness-95 disabled:opacity-50"
             >
               <CheckCircle2 className="h-3.5 w-3.5" /> Resolve
             </button>
@@ -202,7 +202,7 @@ export default function ComplianceIssuesPage() {
                 e.stopPropagation()
                 setDeleteId(r.id)
               }}
-              className="rounded-md p-1.5 text-brand-muted hover:bg-red-50 hover:text-red-600"
+              className="rounded-md p-1.5 text-ink-2 hover:bg-pill-red-bg hover:text-pill-red-fg"
               aria-label="Delete"
             >
               <Trash2 className="h-4 w-4" />
@@ -229,7 +229,7 @@ export default function ComplianceIssuesPage() {
       </PageHeader>
 
       {overdueCount > 0 && (
-        <div className="mb-4 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-red-700">
+        <div className="mb-4 flex items-center gap-2 rounded-lg border border-pill-red-fg/30 bg-pill-red-bg px-4 py-2.5 text-sm text-pill-red-fg">
           <AlertTriangle className="h-4 w-4 shrink-0" />
           <span>
             <strong>{overdueCount}</strong> open issue{overdueCount > 1 ? 's are' : ' is'} past
@@ -238,7 +238,7 @@ export default function ComplianceIssuesPage() {
         </div>
       )}
 
-      <div className="rounded-xl border border-black/5 bg-white p-4">
+      <div className="rounded-xl border border-line bg-surface p-4">
         <DataTable columns={columns} data={issues} loading={isLoading} onRowClick={openEdit} />
       </div>
 

@@ -40,11 +40,11 @@ export function RecordDrawer({
 
         <div className="flex-1 py-6">{children}</div>
 
-        <SheetFooter className="flex gap-2">
+        <SheetFooter className="-mx-6 -mb-6 flex gap-2 border-t border-line-soft bg-surface px-6 py-4">
           <Button variant="outline" onClick={onDiscard} disabled={loading}>
             Discard
           </Button>
-          <Button onClick={onSave} disabled={loading} className="bg-brand-primary hover:bg-brand-primary/90">
+          <Button onClick={onSave} disabled={loading}>
             {loading ? 'Saving...' : 'Save'}
           </Button>
         </SheetFooter>

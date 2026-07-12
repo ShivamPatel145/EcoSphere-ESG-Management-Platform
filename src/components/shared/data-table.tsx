@@ -66,28 +66,30 @@ export function DataTable<T extends { id: string }>({
 
   if (loading) {
     return (
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {columns.map((col) => (
-              <TableHead key={String(col.key)} style={{ width: col.width }}>
-                {col.label}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {[...Array(5)].map((_, i) => (
-            <TableRow key={i}>
+      <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-[0_1px_2px_rgba(31,41,55,.04)]">
+        <Table>
+          <TableHeader>
+            <TableRow>
               {columns.map((col) => (
-                <TableCell key={String(col.key)}>
-                  <div className="h-4 bg-gray-200 rounded animate-pulse" />
-                </TableCell>
+                <TableHead key={String(col.key)} style={{ width: col.width }}>
+                  {col.label}
+                </TableHead>
               ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {[...Array(5)].map((_, i) => (
+              <TableRow key={i}>
+                {columns.map((col) => (
+                  <TableCell key={String(col.key)}>
+                    <div className="animate-es-shimmer h-4 rounded bg-track" />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     )
   }
 
@@ -97,6 +99,7 @@ export function DataTable<T extends { id: string }>({
 
   return (
     <div className="space-y-4">
+      <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-[0_1px_2px_rgba(31,41,55,.04)]">
       <Table>
         <TableHeader>
           <TableRow>
@@ -129,7 +132,7 @@ export function DataTable<T extends { id: string }>({
           {paginated.map((item) => (
             <TableRow
               key={item.id}
-              className={onRowClick ? 'cursor-pointer hover:bg-gray-50' : ''}
+              className={onRowClick ? 'cursor-pointer hover:bg-accent-soft' : ''}
               onClick={() => onRowClick?.(item)}
             >
               {columns.map((col) => (
@@ -142,8 +145,8 @@ export function DataTable<T extends { id: string }>({
         </TableBody>
       </Table>
 
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-gray-600">
+      <div className="flex items-center justify-between border-t border-line-soft px-[18px] py-2.5">
+        <div className="text-[12px] text-faint tabular-nums">
           Showing {page * pageSize + 1}-{Math.min((page + 1) * pageSize, sorted.length)} of{' '}
           {sorted.length}
         </div>
@@ -165,6 +168,7 @@ export function DataTable<T extends { id: string }>({
             Next
           </Button>
         </div>
+      </div>
       </div>
     </div>
   )

@@ -39,16 +39,16 @@ const SheetContent = React.forwardRef<
       <SheetOverlay />
       <SheetPrimitive.Content
         ref={ref}
-        className={`fixed z-50 flex flex-col gap-4 overflow-y-auto bg-white p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out ${
+        className={`fixed z-50 flex flex-col gap-4 overflow-y-auto border-line bg-surface p-6 shadow-[0_24px_60px_rgba(31,41,55,.20)] duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out ${
           side === 'top' || side === 'bottom'
             ? `inset-x-0 max-h-[50vh] ${sideClasses[side]} data-[state=closed]:slide-out-to-${side === 'top' ? 'top' : 'bottom'}-full data-[state=open]:slide-in-from-${side === 'top' ? 'top' : 'bottom'}-full`
-            : `inset-y-0 max-w-[100vw] ${sideClasses[side]} data-[state=closed]:slide-out-to-${side} data-[state=open]:slide-in-from-${side}`
+            : `inset-y-0 max-w-[100vw] border-l ${sideClasses[side]} data-[state=closed]:slide-out-to-${side} data-[state=open]:slide-in-from-${side}`
         } ${className || ''}`}
         {...props}
       >
         {children}
-        <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 disabled:pointer-events-none">
-          <X className="h-4 w-4" />
+        <SheetPrimitive.Close className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-md text-faint transition-colors hover:bg-hover hover:text-ink focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 focus:ring-offset-surface disabled:pointer-events-none">
+          <X className="h-[18px] w-[18px]" />
           <span className="sr-only">Close</span>
         </SheetPrimitive.Close>
       </SheetPrimitive.Content>
@@ -71,7 +71,7 @@ const SheetTitle = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title>
 >(({ className, ...props }, ref) => (
-  <SheetPrimitive.Title ref={ref} className={`text-lg font-semibold text-brand-text ${className || ''}`} {...props} />
+  <SheetPrimitive.Title ref={ref} className={`text-[16px] font-semibold text-ink ${className || ''}`} {...props} />
 ))
 SheetTitle.displayName = SheetPrimitive.Title.displayName
 
@@ -79,7 +79,7 @@ const SheetDescription = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Description>
 >(({ className, ...props }, ref) => (
-  <SheetPrimitive.Description ref={ref} className={`text-sm text-gray-500 ${className || ''}`} {...props} />
+  <SheetPrimitive.Description ref={ref} className={`text-[13px] text-ink-2 ${className || ''}`} {...props} />
 ))
 SheetDescription.displayName = SheetPrimitive.Description.displayName
 

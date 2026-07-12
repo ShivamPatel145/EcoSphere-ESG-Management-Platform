@@ -135,7 +135,7 @@ export default function AuditsPage() {
               e.stopPropagation()
               setDeleteId(r.id)
             }}
-            className="rounded-md p-1.5 text-brand-muted hover:bg-red-50 hover:text-red-600"
+            className="rounded-md p-1.5 text-ink-2 hover:bg-pill-red-bg hover:text-pill-red-fg"
             aria-label="Delete"
           >
             <Trash2 className="h-4 w-4" />
@@ -157,7 +157,7 @@ export default function AuditsPage() {
         )}
       </PageHeader>
 
-      <div className="rounded-xl border border-black/5 bg-white p-4">
+      <div className="rounded-xl border border-line bg-surface p-4">
         <DataTable columns={columns} data={audits} loading={isLoading} onRowClick={openEdit} />
       </div>
 

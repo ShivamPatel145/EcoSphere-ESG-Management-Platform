@@ -15,17 +15,17 @@ type Category = {
 type FormValues = { name: string; type: 'CSR_ACTIVITY' | 'CHALLENGE'; status: 'ACTIVE' | 'INACTIVE' }
 
 const TYPE_CONFIG = {
-  CSR_ACTIVITY: { label: 'CSR Activity', bg: 'bg-emerald-50', text: 'text-emerald-700' },
-  CHALLENGE:    { label: 'Challenge',    bg: 'bg-indigo-50',  text: 'text-indigo-700'  },
+  CSR_ACTIVITY: { label: 'CSR Activity', bg: 'bg-pill-green-bg', text: 'text-pill-green-fg' },
+  CHALLENGE:    { label: 'Challenge',    bg: 'bg-pill-blue-bg',  text: 'text-pill-blue-fg'  },
 }
 
 function TypePill({ type }: { type: string }) {
-  const c = TYPE_CONFIG[type as keyof typeof TYPE_CONFIG] ?? { label: type, bg: 'bg-gray-50', text: 'text-gray-600' }
+  const c = TYPE_CONFIG[type as keyof typeof TYPE_CONFIG] ?? { label: type, bg: 'bg-canvas', text: 'text-ink-2' }
   return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${c.bg} ${c.text}`}>{c.label}</span>
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const s = status === 'ACTIVE' ? { bg: 'bg-emerald-50', text: 'text-emerald-700' } : { bg: 'bg-gray-100', text: 'text-gray-500' }
+  const s = status === 'ACTIVE' ? { bg: 'bg-pill-green-bg', text: 'text-pill-green-fg' } : { bg: 'bg-surface-2', text: 'text-ink-2' }
   return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${s.bg} ${s.text}`}>{status === 'ACTIVE' ? 'Active' : 'Inactive'}</span>
 }
 
@@ -68,53 +68,53 @@ export default function CategoriesPage() {
   const closeDrawer = () => { setDrawerOpen(false); setSelected(null) }
 
   return (
-    <div className="min-h-full bg-[#F7F6F1]">
+    <div className="min-h-full bg-canvas">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Categories</h1>
-          <p className="text-sm text-gray-500 mt-0.5">{isLoading ? '…' : `${categories.length} categories`} · CSR Activity and Challenge taxonomy</p>
+          <h1 className="text-2xl font-semibold text-ink">Categories</h1>
+          <p className="text-sm text-ink-2 mt-0.5">{isLoading ? '…' : `${categories.length} categories`} · CSR Activity and Challenge taxonomy</p>
         </div>
-        <button onClick={openCreate} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#4F7A5A] text-white text-sm font-medium hover:bg-[#3d6147] transition-colors">
+        <button onClick={openCreate} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-primary text-white text-sm font-medium hover:bg-brand-primary-dark transition-colors">
           <Plus className="w-4 h-4" />New Category
         </button>
       </div>
 
       <div className="flex items-center gap-3 mb-4">
-        <div className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg flex-1 max-w-xs shadow-sm">
-          <Search className="w-4 h-4 text-gray-400 shrink-0" />
-          <input type="text" placeholder="Search by name or type…" value={search} onChange={e => setSearch(e.target.value)} className="flex-1 text-sm bg-transparent outline-none placeholder:text-gray-400" />
-          {search && <button onClick={() => setSearch('')}><X className="w-3.5 h-3.5 text-gray-400" /></button>}
+        <div className="flex items-center gap-2 px-3 py-2 bg-surface border border-line rounded-lg flex-1 max-w-xs shadow-[0_1px_2px_rgba(31,41,55,.04)]">
+          <Search className="w-4 h-4 text-faint shrink-0" />
+          <input type="text" placeholder="Search by name or type…" value={search} onChange={e => setSearch(e.target.value)} className="flex-1 text-sm bg-transparent outline-none placeholder:text-faint" />
+          {search && <button onClick={() => setSearch('')}><X className="w-3.5 h-3.5 text-faint" /></button>}
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className="bg-surface rounded-xl border border-line shadow-[0_1px_2px_rgba(31,41,55,.04)] overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-100">
-              <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">Name</th>
-              <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">Type</th>
-              <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">Status</th>
+            <tr className="border-b border-line-soft">
+              <th className="text-left text-xs font-semibold text-faint uppercase tracking-wider px-5 py-3">Name</th>
+              <th className="text-left text-xs font-semibold text-faint uppercase tracking-wider px-5 py-3">Type</th>
+              <th className="text-left text-xs font-semibold text-faint uppercase tracking-wider px-5 py-3">Status</th>
               <th className="px-5 py-3" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
+          <tbody className="divide-y divide-line-soft">
             {isLoading ? [...Array(4)].map((_, i) => (
-              <tr key={i}>{[...Array(4)].map((_, j) => <td key={j} className="px-5 py-3.5"><div className="h-4 bg-gray-100 rounded animate-pulse w-3/4" /></td>)}</tr>
+              <tr key={i}>{[...Array(4)].map((_, j) => <td key={j} className="px-5 py-3.5"><div className="h-4 bg-surface-2 rounded animate-pulse w-3/4" /></td>)}</tr>
             )) : filtered.length === 0 ? (
               <tr><td colSpan={4} className="px-5 py-16 text-center">
-                <div className="flex flex-col items-center gap-2 text-gray-400">
+                <div className="flex flex-col items-center gap-2 text-faint">
                   <span className="text-4xl">🗂️</span>
-                  <p className="text-sm font-medium text-gray-500">No categories found</p>
+                  <p className="text-sm font-medium text-ink-2">No categories found</p>
                 </div>
               </td></tr>
             ) : filtered.map(cat => (
-              <tr key={cat.id} onClick={() => openEdit(cat)} className="hover:bg-[#F7F6F1] cursor-pointer transition-colors group">
-                <td className="px-5 py-3.5 font-medium text-gray-900">{cat.name}</td>
+              <tr key={cat.id} onClick={() => openEdit(cat)} className="hover:bg-accent-soft cursor-pointer transition-colors group">
+                <td className="px-5 py-3.5 font-medium text-ink">{cat.name}</td>
                 <td className="px-5 py-3.5"><TypePill type={cat.type} /></td>
                 <td className="px-5 py-3.5"><StatusBadge status={cat.status} /></td>
                 <td className="px-5 py-3.5">
                   <button onClick={e => { e.stopPropagation(); setDeleteTarget(cat) }}
-                    className="opacity-0 group-hover:opacity-100 p-1.5 rounded-md hover:bg-red-50 text-gray-400 hover:text-red-500 transition-all">
+                    className="opacity-0 group-hover:opacity-100 p-1.5 rounded-md hover:bg-pill-red-bg text-faint hover:text-pill-red-fg transition-all">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </td>
@@ -128,35 +128,35 @@ export default function CategoriesPage() {
       {drawerOpen && (
         <div className="fixed inset-0 z-50 flex">
           <div className="flex-1 bg-black/30 backdrop-blur-sm" onClick={closeDrawer} />
-          <div className="w-[420px] bg-white shadow-2xl flex flex-col h-full">
-            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
-              <h2 className="text-base font-semibold text-gray-900">{selected ? 'Edit Category' : 'New Category'}</h2>
-              <button onClick={closeDrawer} className="p-1.5 rounded-md hover:bg-gray-100 text-gray-400"><X className="w-5 h-5" /></button>
+          <div className="w-[420px] bg-surface shadow-2xl flex flex-col h-full">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-line-soft">
+              <h2 className="text-base font-semibold text-ink">{selected ? 'Edit Category' : 'New Category'}</h2>
+              <button onClick={closeDrawer} className="p-1.5 rounded-md hover:bg-hover text-faint"><X className="w-5 h-5" /></button>
             </div>
             <form onSubmit={handleSubmit(v => saveMutation.mutate(v))} className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-gray-700">Name <span className="text-red-500">*</span></label>
-                <input {...register('name', { required: 'Name is required' })} placeholder="e.g. Community Service" className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 transition" />
-                {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
+                <label className="text-sm font-medium text-ink">Name <span className="text-pill-red-fg">*</span></label>
+                <input {...register('name', { required: 'Name is required' })} placeholder="e.g. Community Service" className="w-full px-3 py-2 text-sm border border-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 transition" />
+                {errors.name && <p className="text-xs text-pill-red-fg">{errors.name.message}</p>}
               </div>
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-gray-700">Type <span className="text-red-500">*</span></label>
-                <select {...register('type')} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 bg-white transition">
+                <label className="text-sm font-medium text-ink">Type <span className="text-pill-red-fg">*</span></label>
+                <select {...register('type')} className="w-full px-3 py-2 text-sm border border-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 bg-surface transition">
                   <option value="CSR_ACTIVITY">CSR Activity</option>
                   <option value="CHALLENGE">Challenge</option>
                 </select>
               </div>
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-gray-700">Status</label>
-                <select {...register('status')} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 bg-white transition">
+                <label className="text-sm font-medium text-ink">Status</label>
+                <select {...register('status')} className="w-full px-3 py-2 text-sm border border-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 bg-surface transition">
                   <option value="ACTIVE">Active</option>
                   <option value="INACTIVE">Inactive</option>
                 </select>
               </div>
             </form>
-            <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3">
-              <button type="button" onClick={closeDrawer} className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">Discard</button>
-              <button onClick={handleSubmit(v => saveMutation.mutate(v))} disabled={saveMutation.isPending} className="px-5 py-2 text-sm font-medium text-white bg-[#4F7A5A] rounded-lg hover:bg-[#3d6147] disabled:opacity-60 transition-colors">
+            <div className="px-6 py-4 border-t border-line-soft flex items-center justify-end gap-3">
+              <button type="button" onClick={closeDrawer} className="px-4 py-2 text-sm font-medium text-ink border border-line rounded-lg hover:bg-hover transition-colors">Discard</button>
+              <button onClick={handleSubmit(v => saveMutation.mutate(v))} disabled={saveMutation.isPending} className="px-5 py-2 text-sm font-medium text-white bg-brand-primary rounded-lg hover:bg-brand-primary-dark disabled:opacity-60 transition-colors">
                 {saveMutation.isPending ? 'Saving…' : 'Save'}
               </button>
             </div>
@@ -168,17 +168,17 @@ export default function CategoriesPage() {
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setDeleteTarget(null)} />
-          <div className="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm mx-4">
+          <div className="relative bg-surface rounded-2xl shadow-2xl p-6 w-full max-w-sm mx-4">
             <div className="flex items-start gap-4">
-              <div className="p-2.5 bg-red-50 rounded-xl shrink-0"><Trash2 className="w-5 h-5 text-red-500" /></div>
+              <div className="p-2.5 bg-pill-red-bg rounded-xl shrink-0"><Trash2 className="w-5 h-5 text-pill-red-fg" /></div>
               <div>
-                <h3 className="font-semibold text-gray-900">Delete Category</h3>
-                <p className="text-sm text-gray-500 mt-1">Delete <span className="font-medium text-gray-700">&ldquo;{deleteTarget.name}&rdquo;</span>? This cannot be undone.</p>
+                <h3 className="font-semibold text-ink">Delete Category</h3>
+                <p className="text-sm text-ink-2 mt-1">Delete <span className="font-medium text-ink">&ldquo;{deleteTarget.name}&rdquo;</span>? This cannot be undone.</p>
               </div>
             </div>
             <div className="flex justify-end gap-3 mt-6">
-              <button onClick={() => setDeleteTarget(null)} className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50">Cancel</button>
-              <button onClick={() => deleteMutation.mutate(deleteTarget.id)} disabled={deleteMutation.isPending} className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-60">
+              <button onClick={() => setDeleteTarget(null)} className="px-4 py-2 text-sm font-medium text-ink border border-line rounded-lg hover:bg-hover">Cancel</button>
+              <button onClick={() => deleteMutation.mutate(deleteTarget.id)} disabled={deleteMutation.isPending} className="px-4 py-2 text-sm font-medium text-white bg-pill-red-fg rounded-lg hover:brightness-95 disabled:opacity-60">
                 {deleteMutation.isPending ? 'Deleting…' : 'Delete'}
               </button>
             </div>

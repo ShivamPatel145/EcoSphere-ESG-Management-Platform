@@ -40,7 +40,7 @@ function StatTile({
   value: number | string
 }) {
   return (
-    <div className="flex items-center gap-4 rounded-xl border border-black/5 bg-white p-5">
+    <div className="flex items-center gap-4 rounded-xl border border-line bg-surface p-5">
       <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-brand-primary/10 text-brand-primary">
         {icon}
       </span>

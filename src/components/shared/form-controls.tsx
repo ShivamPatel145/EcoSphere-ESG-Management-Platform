@@ -4,7 +4,7 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 
 const base =
-  'w-full rounded-lg border border-black/10 bg-white px-3 py-2 text-sm text-brand-text outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/30 disabled:opacity-60'
+  'w-full rounded-lg border border-input-line bg-surface px-3 py-2 text-[13.5px] text-ink outline-none transition focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 disabled:opacity-60'
 
 export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, ...props }, ref) => (
@@ -40,12 +40,12 @@ export function Checkbox({
     <label className="flex cursor-pointer items-start gap-3">
       <input
         type="checkbox"
-        className="mt-0.5 h-4 w-4 shrink-0 rounded border-black/20 accent-brand-primary"
+        className="mt-0.5 h-4 w-4 shrink-0 rounded border-input-line accent-brand-primary"
         {...props}
       />
       <span>
-        <span className="block text-sm font-medium text-brand-text">{label}</span>
-        {description && <span className="block text-xs text-brand-muted">{description}</span>}
+        <span className="block text-sm font-medium text-ink">{label}</span>
+        {description && <span className="block text-xs text-ink-2">{description}</span>}
       </span>
     </label>
   )

@@ -11,13 +11,13 @@ interface FormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function FormField({ label, error, required, children, ...props }: FormFieldProps) {
   return (
-    <div className="space-y-2" {...props}>
-      <label className="block text-sm font-medium text-gray-900">
+    <div className="space-y-1.5" {...props}>
+      <label className="block text-[12px] font-semibold text-ink">
         {label}
-        {required && <span className="text-red-600 ml-1">*</span>}
+        {required && <span className="ml-1 text-pill-red-fg">*</span>}
       </label>
       {children}
-      {error && <p className="text-sm text-red-600">{error.message}</p>}
+      {error && <p className="text-[12px] text-pill-red-fg">{error.message}</p>}
     </div>
   )
 }

@@ -24,11 +24,11 @@ type FormValues = {
 const STATUS_STEPS = ['DRAFT', 'CONFIRMED', 'VALIDATED', 'POSTED']
 const STATUS_LABELS: Record<string, string> = { DRAFT: 'Draft', CONFIRMED: 'Confirmed', VALIDATED: 'Validated', POSTED: 'Posted', NEEDS_REVIEW: 'Needs Review' }
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  DRAFT:        { bg: 'bg-gray-100',    text: 'text-gray-600'   },
-  CONFIRMED:    { bg: 'bg-blue-50',     text: 'text-blue-700'   },
-  VALIDATED:    { bg: 'bg-emerald-50',  text: 'text-emerald-700'},
-  POSTED:       { bg: 'bg-purple-50',   text: 'text-purple-700' },
-  NEEDS_REVIEW: { bg: 'bg-amber-50',    text: 'text-amber-700'  },
+  DRAFT:        { bg: 'bg-surface-2',      text: 'text-ink-2'         },
+  CONFIRMED:    { bg: 'bg-pill-blue-bg',   text: 'text-pill-blue-fg'  },
+  VALIDATED:    { bg: 'bg-pill-green-bg',  text: 'text-pill-green-fg' },
+  POSTED:       { bg: 'bg-tint-green',     text: 'text-pill-green-fg' },
+  NEEDS_REVIEW: { bg: 'bg-pill-amber-bg',  text: 'text-pill-amber-fg' },
 }
 const STATUS_NEXT: Record<string, { label: string; next: string; Icon: typeof CheckCircle }> = {
   DRAFT:        { label: 'Confirm',    next: 'CONFIRMED', Icon: CheckCircle  },
@@ -37,8 +37,8 @@ const STATUS_NEXT: Record<string, { label: string; next: string; Icon: typeof Ch
 }
 
 function StatusPill({ status }: { status: string }) {
-  const c = STATUS_COLORS[status] ?? { bg: 'bg-gray-100', text: 'text-gray-600' }
-  return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${c.bg} ${c.text}`}>{STATUS_LABELS[status] ?? status}</span>
+  const c = STATUS_COLORS[status] ?? { bg: 'bg-surface-2', text: 'text-ink-2' }
+  return <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11.5px] font-semibold ${c.bg} ${c.text}`}>{STATUS_LABELS[status] ?? status}</span>
 }
 
 function StepIndicator({ status }: { status: string }) {
@@ -47,13 +47,13 @@ function StepIndicator({ status }: { status: string }) {
     <div className="flex items-center gap-0 mb-6">
       {STATUS_STEPS.map((step, i) => (
         <div key={step} className="flex items-center">
-          <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all ${i < idx ? 'bg-[#4F7A5A] text-white' : i === idx ? 'bg-[#4F7A5A] text-white ring-2 ring-[#4F7A5A] ring-offset-2' : 'bg-gray-100 text-gray-400'}`}>
+          <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-all ${i < idx ? 'bg-brand-primary text-white' : i === idx ? 'bg-brand-primary text-white ring-2 ring-brand-primary ring-offset-2 ring-offset-surface' : 'bg-surface-2 text-faint'}`}>
             {i < idx && <CheckCircle className="w-3.5 h-3.5" />}
             <span>{i + 1}</span>
             <span className="hidden sm:inline">{STATUS_LABELS[step]}</span>
           </div>
           {i < STATUS_STEPS.length - 1 && (
-            <div className={`h-px w-8 mx-1 ${i < idx ? 'bg-[#4F7A5A]' : 'bg-gray-200'}`} />
+            <div className={`h-px w-8 mx-1 ${i < idx ? 'bg-brand-primary' : 'bg-line'}`} />
           )}
         </div>
       ))}
@@ -63,12 +63,12 @@ function StepIndicator({ status }: { status: string }) {
 
 // ---------- KPI Tile ----------
 function KpiCard({ label, value, sub, color = 'default' }: { label: string; value: string | number; sub?: string; color?: 'default' | 'warning' | 'success' }) {
-  const colorMap = { default: 'text-gray-900', warning: 'text-amber-600', success: 'text-emerald-600' }
+  const colorMap = { default: 'text-ink', warning: 'text-pill-amber-fg', success: 'text-pill-green-fg' }
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm px-5 py-4">
-      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{label}</p>
-      <p className={`text-2xl font-bold mt-1 ${colorMap[color]}`}>{value}</p>
-      {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
+    <div className="bg-surface rounded-[10px] border border-line shadow-[0_1px_2px_rgba(31,41,55,.04)] px-5 py-4">
+      <p className="text-[11px] font-semibold text-faint uppercase tracking-[0.06em]">{label}</p>
+      <p className={`text-[23px] font-semibold mt-1 tabular-nums ${colorMap[color]}`}>{value}</p>
+      {sub && <p className="text-[11.5px] text-faint mt-0.5">{sub}</p>}
     </div>
   )
 }
@@ -141,14 +141,14 @@ export default function CarbonTransactionsPage() {
   const nextAction = selected ? STATUS_NEXT[selected.status] : null
 
   return (
-    <div className="min-h-full bg-[#F7F6F1]">
+    <div className="min-h-full animate-es-fade">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Carbon Transactions</h1>
-          <p className="text-sm text-gray-500 mt-0.5">{isLoading ? '…' : `${transactions.length} records`} · Track emissions across all departments</p>
+      <div className="flex items-baseline justify-between mb-6">
+        <div className="flex items-baseline gap-2.5">
+          <h1 className="text-[20px] font-semibold text-ink">Carbon Transactions</h1>
+          <p className="text-[12.5px] text-faint">{isLoading ? '…' : `${transactions.length} records`} · Track emissions across all departments</p>
         </div>
-        <button onClick={openCreate} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#4F7A5A] text-white text-sm font-medium hover:bg-[#3d6147] transition-colors">
+        <button onClick={openCreate} className="inline-flex items-center gap-2 h-[34px] px-4 rounded-[7px] bg-brand-primary text-white text-[12.5px] font-semibold hover:bg-brand-primary-dark transition-colors">
           <Plus className="w-4 h-4" />Log Carbon Data
         </button>
       </div>
@@ -162,55 +162,55 @@ export default function CarbonTransactionsPage() {
 
       {/* Filter */}
       <div className="flex items-center gap-3 mb-4">
-        <div className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg flex-1 max-w-xs shadow-sm">
-          <Search className="w-4 h-4 text-gray-400 shrink-0" />
-          <input type="text" placeholder="Search reference, module, product…" value={search} onChange={e => setSearch(e.target.value)} className="flex-1 text-sm bg-transparent outline-none placeholder:text-gray-400" />
-          {search && <button onClick={() => setSearch('')}><X className="w-3.5 h-3.5 text-gray-400" /></button>}
+        <div className="flex items-center gap-2 h-[34px] px-2.5 bg-surface border border-line rounded-[7px] flex-1 max-w-xs">
+          <Search className="w-4 h-4 text-faint shrink-0" />
+          <input type="text" placeholder="Search reference, module, product…" value={search} onChange={e => setSearch(e.target.value)} className="flex-1 text-[12.5px] bg-transparent outline-none text-ink placeholder:text-faint" />
+          {search && <button onClick={() => setSearch('')}><X className="w-3.5 h-3.5 text-faint" /></button>}
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className="bg-surface rounded-lg border border-line shadow-[0_1px_2px_rgba(31,41,55,.04)] overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-100">
-              <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">Reference</th>
-              <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">Module</th>
-              <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">Product</th>
-              <th className="text-right text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">Quantity</th>
-              <th className="text-right text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">CO₂e (kg)</th>
-              <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">Department</th>
-              <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">Date</th>
-              <th className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-3">Status</th>
-              <th className="px-5 py-3" />
+            <tr className="border-b border-line bg-canvas">
+              <th className="text-left text-[11px] font-semibold text-faint uppercase tracking-[0.05em] px-[18px] py-2.5">Reference</th>
+              <th className="text-left text-[11px] font-semibold text-faint uppercase tracking-[0.05em] px-[18px] py-2.5">Module</th>
+              <th className="text-left text-[11px] font-semibold text-faint uppercase tracking-[0.05em] px-[18px] py-2.5">Product</th>
+              <th className="text-right text-[11px] font-semibold text-faint uppercase tracking-[0.05em] px-[18px] py-2.5">Quantity</th>
+              <th className="text-right text-[11px] font-semibold text-faint uppercase tracking-[0.05em] px-[18px] py-2.5">CO₂e (kg)</th>
+              <th className="text-left text-[11px] font-semibold text-faint uppercase tracking-[0.05em] px-[18px] py-2.5">Department</th>
+              <th className="text-left text-[11px] font-semibold text-faint uppercase tracking-[0.05em] px-[18px] py-2.5">Date</th>
+              <th className="text-left text-[11px] font-semibold text-faint uppercase tracking-[0.05em] px-[18px] py-2.5">Status</th>
+              <th className="px-[18px] py-2.5" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
+          <tbody className="divide-y divide-line-soft">
             {isLoading ? [...Array(6)].map((_, i) => (
-              <tr key={i}>{[...Array(9)].map((_, j) => <td key={j} className="px-5 py-3.5"><div className="h-4 bg-gray-100 rounded animate-pulse w-3/4" /></td>)}</tr>
+              <tr key={i}>{[...Array(9)].map((_, j) => <td key={j} className="px-[18px] py-3.5"><div className="h-4 bg-track rounded animate-es-shimmer w-3/4" /></td>)}</tr>
             )) : filtered.length === 0 ? (
               <tr><td colSpan={9} className="px-5 py-20 text-center">
                 <div className="flex flex-col items-center gap-3">
-                  <div className="w-14 h-14 rounded-full bg-[#4F7A5A]/10 flex items-center justify-center">
+                  <div className="w-14 h-14 rounded-full bg-tint-green flex items-center justify-center">
                     <span className="text-2xl">🌿</span>
                   </div>
-                  <p className="text-sm font-medium text-gray-500">No carbon transactions yet</p>
-                  <p className="text-xs text-gray-400">Log your first record manually or import from fleet and energy systems.</p>
-                  <button onClick={openCreate} className="mt-1 px-4 py-2 text-sm font-medium text-white bg-[#4F7A5A] rounded-lg hover:bg-[#3d6147] transition-colors">+ Log Carbon Data</button>
+                  <p className="text-sm font-medium text-ink-2">No carbon transactions yet</p>
+                  <p className="text-xs text-faint">Log your first record manually or import from fleet and energy systems.</p>
+                  <button onClick={openCreate} className="mt-1 px-4 py-2 text-sm font-semibold text-white bg-brand-primary rounded-[7px] hover:bg-brand-primary-dark transition-colors">+ Log Carbon Data</button>
                 </div>
               </td></tr>
             ) : filtered.map(tx => (
-              <tr key={tx.id} onClick={() => openEdit(tx)} className="hover:bg-[#F7F6F1] cursor-pointer transition-colors group">
-                <td className="px-5 py-3.5 font-mono text-xs font-semibold text-[#4F7A5A]">{tx.reference}</td>
-                <td className="px-5 py-3.5 text-gray-600">{tx.sourceModule}</td>
-                <td className="px-5 py-3.5 text-gray-600">{tx.product ?? <span className="text-gray-300">—</span>}</td>
-                <td className="px-5 py-3.5 text-right font-mono text-gray-700">{tx.quantity} {tx.emissionFactorUnit}</td>
-                <td className="px-5 py-3.5 text-right font-bold text-gray-900 font-mono">{Number(tx.calculatedCo2).toFixed(1)}</td>
-                <td className="px-5 py-3.5 text-gray-500 text-xs">{tx.departmentName ?? <span className="text-gray-300">—</span>}</td>
-                <td className="px-5 py-3.5 text-gray-500 text-xs">{new Date(tx.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
-                <td className="px-5 py-3.5"><StatusPill status={tx.status} /></td>
-                <td className="px-5 py-3.5">
-                  <button onClick={e => { e.stopPropagation(); setDeleteTarget(tx) }} className="opacity-0 group-hover:opacity-100 p-1.5 rounded-md hover:bg-red-50 text-gray-400 hover:text-red-500 transition-all">
+              <tr key={tx.id} onClick={() => openEdit(tx)} className="hover:bg-accent-soft cursor-pointer transition-colors group">
+                <td className="px-[18px] py-3.5 font-mono text-xs font-semibold text-brand-primary">{tx.reference}</td>
+                <td className="px-[18px] py-3.5 text-[13px] text-ink">{tx.sourceModule}</td>
+                <td className="px-[18px] py-3.5 text-[13px] text-ink">{tx.product ?? <span className="text-faint">—</span>}</td>
+                <td className="px-[18px] py-3.5 text-right font-mono text-ink-2">{tx.quantity} {tx.emissionFactorUnit}</td>
+                <td className="px-[18px] py-3.5 text-right font-semibold text-ink font-mono tabular-nums">{Number(tx.calculatedCo2).toFixed(1)}</td>
+                <td className="px-[18px] py-3.5 text-ink-2 text-xs">{tx.departmentName ?? <span className="text-faint">—</span>}</td>
+                <td className="px-[18px] py-3.5 text-ink-2 text-xs tabular-nums">{new Date(tx.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+                <td className="px-[18px] py-3.5"><StatusPill status={tx.status} /></td>
+                <td className="px-[18px] py-3.5">
+                  <button onClick={e => { e.stopPropagation(); setDeleteTarget(tx) }} className="opacity-0 group-hover:opacity-100 p-1.5 rounded-md hover:bg-pill-red-bg text-faint hover:text-pill-red-fg transition-all">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </td>
@@ -224,16 +224,16 @@ export default function CarbonTransactionsPage() {
       {drawerOpen && (
         <div className="fixed inset-0 z-50 flex">
           <div className="flex-1 bg-black/30 backdrop-blur-sm" onClick={closeDrawer} />
-          <div className="w-[500px] bg-white shadow-2xl flex flex-col h-full">
+          <div className="w-[500px] max-w-[100vw] bg-surface border-l border-line shadow-[0_24px_60px_rgba(31,41,55,.20)] flex flex-col h-full animate-es-drawer">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-line-soft">
               <div>
-                <h2 className="text-base font-semibold text-gray-900">
+                <h2 className="text-base font-semibold text-ink">
                   {selected ? selected.reference : 'New Carbon Transaction'}
                 </h2>
                 {selected && <div className="flex items-center gap-2 mt-1"><StatusPill status={selected.status} /></div>}
               </div>
-              <button onClick={closeDrawer} className="p-1.5 rounded-md hover:bg-gray-100 text-gray-400"><X className="w-5 h-5" /></button>
+              <button onClick={closeDrawer} className="p-1.5 rounded-md hover:bg-hover text-faint hover:text-ink transition-colors"><X className="w-5 h-5" /></button>
             </div>
 
             <div className="flex-1 overflow-y-auto px-6 py-5">
@@ -242,70 +242,70 @@ export default function CarbonTransactionsPage() {
 
               <form className="space-y-5">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700">Source Module <span className="text-red-500">*</span></label>
-                  <select {...register('sourceModule')} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 bg-white transition">
+                  <label className="text-[12px] font-semibold text-ink">Source Module <span className="text-pill-red-fg">*</span></label>
+                  <select {...register('sourceModule')} className="w-full px-3 py-2 text-[13.5px] border border-input-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 bg-surface text-ink transition">
                     {['Manual','Fleet','Purchase','Expense','Manufacturing'].map(m => <option key={m} value={m}>{m}</option>)}
                   </select>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700">Product / Description</label>
+                  <label className="text-[12px] font-semibold text-ink">Product / Description</label>
                   <input {...register('product')} placeholder="e.g. Diesel — Van #4, Grid electricity — HQ"
-                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 transition" />
+                    className="w-full px-3 py-2 text-[13.5px] border border-input-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 bg-surface text-ink placeholder:text-faint transition" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-gray-700">Quantity <span className="text-red-500">*</span></label>
+                    <label className="text-[12px] font-semibold text-ink">Quantity <span className="text-pill-red-fg">*</span></label>
                     <input type="number" step="0.01" {...register('quantity', { required: true, valueAsNumber: true, validate: v => Number(v) > 0 || 'Must be > 0' })}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 font-mono transition" />
-                    {errors.quantity && <p className="text-xs text-red-500">Must be greater than 0</p>}
+                      className="w-full px-3 py-2 text-[13.5px] border border-input-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 bg-surface text-ink font-mono transition" />
+                    {errors.quantity && <p className="text-xs text-pill-red-fg">Must be greater than 0</p>}
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-gray-700">Emission Factor <span className="text-red-500">*</span></label>
-                    <select {...register('emissionFactorId', { required: true })} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 bg-white transition">
+                    <label className="text-[12px] font-semibold text-ink">Emission Factor <span className="text-pill-red-fg">*</span></label>
+                    <select {...register('emissionFactorId', { required: true })} className="w-full px-3 py-2 text-[13.5px] border border-input-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 bg-surface text-ink transition">
                       <option value="">— Select —</option>
                       {factors.filter(f => f.status === 'ACTIVE').map(f => <option key={f.id} value={f.id}>{f.name} ({f.unit})</option>)}
                     </select>
-                    {errors.emissionFactorId && <p className="text-xs text-red-500">Required</p>}
+                    {errors.emissionFactorId && <p className="text-xs text-pill-red-fg">Required</p>}
                   </div>
                 </div>
 
                 {/* Live CO₂ preview */}
                 {livePreview !== null && (
-                  <div className="flex items-center justify-between p-4 bg-[#F7F6F1] border border-[#4F7A5A]/20 rounded-xl">
+                  <div className="flex items-center justify-between p-4 bg-tint-green border border-accent-line rounded-xl">
                     <div>
-                      <p className="text-xs font-semibold text-[#4F7A5A] uppercase tracking-wider">Calculated CO₂e</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{watchedQty} × {factorMap[watchedFactorId]?.co2PerUnit} kg/unit · auto-calculated</p>
+                      <p className="text-[11px] font-semibold text-brand-primary uppercase tracking-[0.06em]">Calculated CO₂e</p>
+                      <p className="text-xs text-ink-2 mt-0.5">{watchedQty} × {factorMap[watchedFactorId]?.co2PerUnit} kg/unit · auto-calculated</p>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900">{livePreview.toFixed(1)} <span className="text-sm font-normal text-gray-500">kg</span></p>
+                    <p className="text-[23px] font-semibold text-ink tabular-nums">{livePreview.toFixed(1)} <span className="text-sm font-normal text-ink-2">kg</span></p>
                   </div>
                 )}
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-gray-700">Department <span className="text-red-500">*</span></label>
-                    <select {...register('departmentId', { required: true })} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 bg-white transition">
+                    <label className="text-[12px] font-semibold text-ink">Department <span className="text-pill-red-fg">*</span></label>
+                    <select {...register('departmentId', { required: true })} className="w-full px-3 py-2 text-[13.5px] border border-input-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 bg-surface text-ink transition">
                       <option value="">— Select —</option>
                       {departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
                     </select>
-                    {errors.departmentId && <p className="text-xs text-red-500">Required</p>}
+                    {errors.departmentId && <p className="text-xs text-pill-red-fg">Required</p>}
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-gray-700">Date <span className="text-red-500">*</span></label>
-                    <input type="date" {...register('date', { required: true })} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-[#4F7A5A] focus:ring-2 focus:ring-[#4F7A5A]/15 transition" />
+                    <label className="text-[12px] font-semibold text-ink">Date <span className="text-pill-red-fg">*</span></label>
+                    <input type="date" {...register('date', { required: true })} className="w-full px-3 py-2 text-[13.5px] border border-input-line rounded-lg outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 bg-surface text-ink transition" />
                   </div>
                 </div>
 
                 {/* Status action */}
                 {selected && nextAction && (
-                  <div className="pt-2 border-t border-gray-100">
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Actions</p>
+                  <div className="pt-2 border-t border-line-soft">
+                    <p className="text-[11px] font-semibold text-faint uppercase tracking-[0.06em] mb-3">Actions</p>
                     <button
                       type="button"
                       disabled={statusMutation.isPending}
                       onClick={() => statusMutation.mutate({ id: selected.id, status: nextAction.next })}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[#4F7A5A] text-[#4F7A5A] text-sm font-medium hover:bg-[#4F7A5A] hover:text-white transition-colors disabled:opacity-60"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-[7px] border border-brand-primary text-brand-primary text-sm font-semibold hover:bg-brand-primary hover:text-white transition-colors disabled:opacity-60"
                     >
                       <nextAction.Icon className="w-4 h-4" />
                       {statusMutation.isPending ? 'Processing…' : nextAction.label}
@@ -315,9 +315,9 @@ export default function CarbonTransactionsPage() {
               </form>
             </div>
 
-            <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3">
-              <button type="button" onClick={closeDrawer} className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">Discard</button>
-              <button onClick={handleSubmit(v => saveMutation.mutate(v))} disabled={saveMutation.isPending} className="px-5 py-2 text-sm font-medium text-white bg-[#4F7A5A] rounded-lg hover:bg-[#3d6147] disabled:opacity-60 transition-colors">
+            <div className="px-6 py-4 border-t border-line-soft flex items-center justify-end gap-3">
+              <button type="button" onClick={closeDrawer} className="px-4 py-2 text-sm font-semibold text-ink border border-line rounded-[7px] hover:bg-hover transition-colors">Discard</button>
+              <button onClick={handleSubmit(v => saveMutation.mutate(v))} disabled={saveMutation.isPending} className="px-5 py-2 text-sm font-semibold text-white bg-brand-primary rounded-[7px] hover:bg-brand-primary-dark disabled:opacity-60 transition-colors">
                 {saveMutation.isPending ? 'Saving…' : 'Save'}
               </button>
             </div>
@@ -329,17 +329,17 @@ export default function CarbonTransactionsPage() {
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setDeleteTarget(null)} />
-          <div className="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm mx-4">
+          <div className="relative bg-surface border border-line rounded-2xl shadow-[0_24px_60px_rgba(31,41,55,.24)] p-6 w-full max-w-sm mx-4 animate-es-fade">
             <div className="flex items-start gap-4">
-              <div className="p-2.5 bg-red-50 rounded-xl shrink-0"><Trash2 className="w-5 h-5 text-red-500" /></div>
+              <div className="p-2.5 bg-pill-red-bg rounded-xl shrink-0"><Trash2 className="w-5 h-5 text-pill-red-fg" /></div>
               <div>
-                <h3 className="font-semibold text-gray-900">Delete transaction {deleteTarget.reference}?</h3>
-                <p className="text-sm text-gray-500 mt-1">This removes the record and its {Number(deleteTarget.calculatedCo2).toFixed(1)} kg CO₂e from all reports. This action cannot be undone.</p>
+                <h3 className="font-semibold text-ink">Delete transaction {deleteTarget.reference}?</h3>
+                <p className="text-sm text-ink-2 mt-1">This removes the record and its {Number(deleteTarget.calculatedCo2).toFixed(1)} kg CO₂e from all reports. This action cannot be undone.</p>
               </div>
             </div>
             <div className="flex justify-end gap-3 mt-6">
-              <button onClick={() => setDeleteTarget(null)} className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50">Cancel</button>
-              <button onClick={() => deleteMutation.mutate(deleteTarget.id)} disabled={deleteMutation.isPending} className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-60">
+              <button onClick={() => setDeleteTarget(null)} className="px-4 py-2 text-sm font-semibold text-ink border border-line rounded-[7px] hover:bg-hover">Cancel</button>
+              <button onClick={() => deleteMutation.mutate(deleteTarget.id)} disabled={deleteMutation.isPending} className="px-4 py-2 text-sm font-semibold text-white bg-pill-red-fg rounded-[7px] hover:brightness-95 disabled:opacity-60">
                 {deleteMutation.isPending ? 'Deleting…' : 'Delete'}
               </button>
             </div>

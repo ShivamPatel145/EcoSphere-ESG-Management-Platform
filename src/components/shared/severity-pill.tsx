@@ -3,16 +3,16 @@
 type Severity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
 
 const styles: Record<Severity, string> = {
-  LOW: 'bg-slate-100 text-slate-700',
-  MEDIUM: 'bg-amber-100 text-amber-800',
-  HIGH: 'bg-orange-100 text-orange-800',
-  CRITICAL: 'bg-red-100 text-red-800',
+  LOW: 'bg-surface-2 text-ink-2',
+  MEDIUM: 'bg-pill-amber-bg text-pill-amber-fg',
+  HIGH: 'bg-pill-amber-bg text-pill-amber-fg',
+  CRITICAL: 'bg-pill-red-bg text-pill-red-fg',
 }
 
 export function SeverityPill({ severity }: { severity: string }) {
   const cls = styles[severity as Severity] || styles.MEDIUM
   return (
-    <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${cls}`}>
+    <span className={`inline-block rounded-full px-2.5 py-0.5 text-[11.5px] font-semibold ${cls}`}>
       {severity}
     </span>
   )

@@ -20,7 +20,7 @@ const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead ref={ref} className={`border-b border-gray-200 bg-gray-50 ${className || ''}`} {...props} />
+  <thead ref={ref} className={`border-b border-line bg-canvas ${className || ''}`} {...props} />
 ))
 TableHeader.displayName = 'TableHeader'
 
@@ -28,7 +28,7 @@ const TableBody = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <tbody ref={ref} className={`divide-y divide-gray-200 ${className || ''}`} {...props} />
+  <tbody ref={ref} className={`divide-y divide-line-soft ${className || ''}`} {...props} />
 ))
 TableBody.displayName = 'TableBody'
 
@@ -38,7 +38,7 @@ const TableFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tfoot
     ref={ref}
-    className={`border-t border-gray-200 bg-gray-50 font-medium ${className || ''}`}
+    className={`border-t border-line bg-canvas font-medium ${className || ''}`}
     {...props}
   />
 ))
@@ -50,7 +50,7 @@ const TableRow = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tr
     ref={ref}
-    className={`border-b border-gray-200 transition-colors hover:bg-gray-50 data-[state=selected]:bg-gray-50 ${className || ''}`}
+    className={`border-b border-line-soft transition-colors hover:bg-accent-soft data-[state=selected]:bg-accent-soft ${className || ''}`}
     {...props}
   />
 ))
@@ -62,7 +62,7 @@ const TableHead = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <th
     ref={ref}
-    className={`h-12 px-4 text-left align-middle font-medium text-gray-700 ${className || ''}`}
+    className={`h-11 px-[18px] text-left align-middle text-[11px] font-semibold uppercase tracking-[0.05em] text-faint ${className || ''}`}
     {...props}
   />
 ))
@@ -72,7 +72,7 @@ const TableCell = React.forwardRef<
   HTMLTableCellElement,
   React.TdHTMLAttributes<HTMLTableCellElement>
 >(({ className, ...props }, ref) => (
-  <td ref={ref} className={`px-4 py-2 align-middle ${className || ''}`} {...props} />
+  <td ref={ref} className={`px-[18px] py-[11px] align-middle text-[13px] text-ink ${className || ''}`} {...props} />
 ))
 TableCell.displayName = 'TableCell'
 

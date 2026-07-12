@@ -173,7 +173,7 @@ export default function CsrActivitiesPage() {
           {activities.map((a) => (
             <div
               key={a.id}
-              className="flex flex-col rounded-xl border border-black/5 bg-white p-5 shadow-sm transition hover:shadow-md"
+              className="flex flex-col rounded-xl border border-line bg-surface p-5 shadow-[0_1px_2px_rgba(31,41,55,.04)] transition hover:shadow-md"
             >
               <div className="flex items-start justify-between gap-2">
                 <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-primary/10 text-brand-primary">
@@ -181,7 +181,7 @@ export default function CsrActivitiesPage() {
                 </span>
                 <div className="flex items-center gap-2">
                   {a.evidenceRequired && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-pill-amber-bg px-2 py-0.5 text-[11px] font-semibold text-pill-amber-fg">
                       <Paperclip className="h-3 w-3" /> Evidence
                     </span>
                   )}
@@ -214,7 +214,7 @@ export default function CsrActivitiesPage() {
                       </button>
                       <button
                         onClick={() => setDeleteId(a.id)}
-                        className="rounded-md p-1.5 text-brand-muted hover:bg-red-50 hover:text-red-600"
+                        className="rounded-md p-1.5 text-ink-2 hover:bg-pill-red-bg hover:text-pill-red-fg"
                         aria-label="Delete"
                       >
                         <Trash2 className="h-4 w-4" />

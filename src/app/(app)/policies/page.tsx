@@ -170,7 +170,7 @@ export default function PoliciesPage() {
           {policies.map((p) => (
             <div
               key={p.id}
-              className="flex flex-col gap-4 rounded-xl border border-black/5 bg-white p-5 sm:flex-row sm:items-center sm:justify-between"
+              className="flex flex-col gap-4 rounded-xl border border-line bg-surface p-5 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="flex min-w-0 items-start gap-3">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-primary/10 text-brand-primary">
@@ -208,7 +208,7 @@ export default function PoliciesPage() {
                     </button>
                     <button
                       onClick={() => setDeleteId(p.id)}
-                      className="rounded-md p-1.5 text-brand-muted hover:bg-red-50 hover:text-red-600"
+                      className="rounded-md p-1.5 text-ink-2 hover:bg-pill-red-bg hover:text-pill-red-fg"
                       aria-label="Delete"
                     >
                       <Trash2 className="h-4 w-4" />
