@@ -31,6 +31,59 @@ async function main() {
   const userBadges = await db.select().from(badgeAwards).where(eq(badgeAwards.userId, user.id));
   console.log("Badges Awarded:", userBadges.length);
 
+  // --- REWARD REDEMPTION TEST ---
+  console.log("\n--- Testing Reward Redemption ---");
+  const { getPointsBalance, redeem } = await import("./src/server/services/gamification/reward");
+  const { rewards } = await import("./src/db/schema");
+
+  const balanceBefore = await getPointsBalance(user.id);
+  console.log("Points Balance Before:", balanceBefore);
+
+  // Create a temporary reward for testing
+  const [testReward] = await db.insert(rewards).values({
+    name: "Test Reward (Mug)",
+    description: "A cool mug",
+    pointsRequired: 50,
+    stock: 2,
+    status: "ACTIVE"
+  }).returning();
+
+  console.log(`Created Reward: ${testReward.name} (Requires: ${testReward.pointsRequired} pts, Stock: ${testReward.stock})`);
+
+  // Attempt redemption 1
+  try {
+    const res = await redeem(user.id, testReward.id);
+    console.log("Redemption 1:", res.success ? "Success" : "Failed");
+  } catch(e: any) {
+    console.log("Redemption 1 Error:", e.message);
+  }
+
+  const balanceAfter1 = await getPointsBalance(user.id);
+  console.log("Points Balance After 1:", balanceAfter1);
+
+  // Attempt redemption 2
+  try {
+    const res = await redeem(user.id, testReward.id);
+    console.log("Redemption 2:", res.success ? "Success" : "Failed");
+  } catch(e: any) {
+    console.log("Redemption 2 Error:", e.message);
+  }
+
+  // Attempt redemption 3 (Should fail due to stock)
+  try {
+    const res = await redeem(user.id, testReward.id);
+    console.log("Redemption 3:", res.success ? "Success" : "Failed");
+  } catch(e: any) {
+    console.log("Redemption 3 Error:", e.message);
+  }
+
+  const [finalReward] = await db.select().from(rewards).where(eq(rewards.id, testReward.id));
+  console.log("Final Reward Stock:", finalReward.stock);
+
+  // Assert Total XP didn't change
+  const [finalUser] = await db.select().from(users).where(eq(users.id, user.id));
+  console.log(`Final Total XP: ${finalUser.totalXp} (Should match original: ${updatedUser.totalXp})`);
+
   process.exit(0);
 }
 
