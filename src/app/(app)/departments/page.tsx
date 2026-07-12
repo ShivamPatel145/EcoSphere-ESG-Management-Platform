@@ -28,7 +28,7 @@ interface UserLite {
 }
 
 const inputCls =
-  'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm outline-none focus:border-brand-primary'
+  'w-full px-3 py-2 border border-input-line rounded-lg text-sm outline-none focus:ring-brand-primary/15 focus:border-brand-primary'
 
 async function getDepartments(): Promise<Department[]> {
   const res = await fetch('/api/departments')
@@ -139,7 +139,7 @@ export default function DepartmentsPage() {
   const columns: Column<Department>[] = [
     { key: 'name', label: 'Name', sortable: true },
     { key: 'code', label: 'Code', sortable: true },
-    { key: 'headName', label: 'Head', render: (v) => v || <span className="text-gray-400">—</span> },
+    { key: 'headName', label: 'Head', render: (v) => v || <span className="text-faint">—</span> },
     { key: 'employeeCount', label: 'Employees', sortable: true },
     { key: 'status', label: 'Status', render: (v) => <StatusPill status={v} /> },
     ...(isAdmin
@@ -154,7 +154,7 @@ export default function DepartmentsPage() {
                   e.stopPropagation()
                   setConfirmDelete(d)
                 }}
-                className="text-gray-400 hover:text-red-600"
+                className="text-faint hover:text-pill-red-fg"
                 aria-label={`Delete ${d.name}`}
               >
                 <Trash2 className="w-4 h-4" />
@@ -169,8 +169,8 @@ export default function DepartmentsPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Departments</h1>
-          <p className="text-sm text-gray-600 mt-1">Organisational units used across ESG scoring.</p>
+          <h1 className="text-3xl font-bold text-ink">Departments</h1>
+          <p className="text-sm text-ink-2 mt-1">Organisational units used across ESG scoring.</p>
         </div>
         {isAdmin && (
           <button
@@ -199,7 +199,7 @@ export default function DepartmentsPage() {
       >
         <div className="space-y-4">
           {error && (
-            <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+            <div className="text-sm text-pill-red-fg bg-pill-red-bg border border-pill-red-fg/30 rounded-lg px-3 py-2">
               {error}
             </div>
           )}

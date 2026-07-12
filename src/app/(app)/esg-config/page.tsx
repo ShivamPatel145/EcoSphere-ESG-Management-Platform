@@ -23,7 +23,7 @@ interface EsgConfig {
 }
 
 const inputCls =
-  'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm outline-none focus:border-brand-primary'
+  'w-full px-3 py-2 border border-input-line rounded-lg text-sm outline-none focus:ring-brand-primary/15 focus:border-brand-primary'
 
 async function getConfig(): Promise<EsgConfig> {
   const res = await fetch('/api/esg-config')
@@ -47,8 +47,8 @@ export function Toggle({
   return (
     <label className={`flex items-start justify-between gap-4 py-3 ${disabled ? 'opacity-60' : 'cursor-pointer'}`}>
       <div>
-        <div className="text-sm font-medium text-gray-900">{label}</div>
-        {description && <div className="text-xs text-gray-500 mt-0.5">{description}</div>}
+        <div className="text-sm font-medium text-ink">{label}</div>
+        {description && <div className="text-xs text-ink-2 mt-0.5">{description}</div>}
       </div>
       <button
         type="button"
@@ -57,11 +57,11 @@ export function Toggle({
         disabled={disabled}
         onClick={() => !disabled && onChange(!checked)}
         className={`relative w-11 h-6 rounded-full transition-colors shrink-0 ${
-          checked ? 'bg-brand-primary' : 'bg-gray-300'
+          checked ? 'bg-brand-primary' : 'bg-track'
         }`}
       >
         <span
-          className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${
+          className={`absolute top-0.5 left-0.5 w-5 h-5 bg-surface rounded-full transition-transform ${
             checked ? 'translate-x-5' : ''
           }`}
         />
@@ -127,21 +127,21 @@ export default function EsgConfigPage() {
     onError: (e: Error) => setError(e.message),
   })
 
-  if (isLoading || !form) return <div className="text-gray-500">Loading configuration…</div>
+  if (isLoading || !form) return <div className="text-ink-2">Loading configuration…</div>
 
   const num = (v: string) => (v === '' ? 0 : Number(v))
 
   return (
     <div className="max-w-2xl">
-      <h1 className="text-3xl font-bold text-gray-900">ESG Configuration</h1>
-      <p className="text-sm text-gray-600 mt-1 mb-8">
+      <h1 className="text-3xl font-bold text-ink">ESG Configuration</h1>
+      <p className="text-sm text-ink-2 mt-1 mb-8">
         Scoring weights, XP rules, and platform toggles.
         {!isAdmin && ' (read-only — admin access required to edit)'}
       </p>
 
       {/* Weights */}
-      <section className="bg-white p-6 rounded-lg border border-gray-200 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Pillar Weights</h2>
+      <section className="bg-surface p-6 rounded-lg border border-line mb-6">
+        <h2 className="text-lg font-semibold text-ink mb-4">Pillar Weights</h2>
         <div className="grid grid-cols-3 gap-4">
           <FormField label="Environmental">
             <input
@@ -168,14 +168,14 @@ export default function EsgConfigPage() {
             />
           </FormField>
         </div>
-        <div className={`mt-3 text-sm ${sumValid ? 'text-green-700' : 'text-red-600'}`}>
+        <div className={`mt-3 text-sm ${sumValid ? 'text-pill-green-fg' : 'text-pill-red-fg'}`}>
           Sum: {weightSum.toFixed(3)} {sumValid ? '✓ (must equal 1.0)' : '✗ must equal 1.0 (±0.001)'}
         </div>
       </section>
 
       {/* XP rules */}
-      <section className="bg-white p-6 rounded-lg border border-gray-200 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">XP Rules</h2>
+      <section className="bg-surface p-6 rounded-lg border border-line mb-6">
+        <h2 className="text-lg font-semibold text-ink mb-4">XP Rules</h2>
         <div className="grid grid-cols-3 gap-4">
           <FormField label="Easy">
             <input type="number" min="0" disabled={!isAdmin} className={inputCls}
@@ -190,7 +190,7 @@ export default function EsgConfigPage() {
               value={form.xpHard} onChange={(e) => setForm({ ...form, xpHard: num(e.target.value) })} />
           </FormField>
         </div>
-        <div className="mt-2 divide-y divide-gray-100">
+        <div className="mt-2 divide-y divide-line-soft">
           <Toggle label="Streak bonus" description="+10% after 4 consecutive weeks"
             checked={form.streakBonusEnabled} disabled={!isAdmin}
             onChange={(v) => setForm({ ...form, streakBonusEnabled: v })} />
@@ -204,9 +204,9 @@ export default function EsgConfigPage() {
       </section>
 
       {/* Platform toggles */}
-      <section className="bg-white p-6 rounded-lg border border-gray-200 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-2">Platform</h2>
-        <div className="divide-y divide-gray-100">
+      <section className="bg-surface p-6 rounded-lg border border-line mb-6">
+        <h2 className="text-lg font-semibold text-ink mb-2">Platform</h2>
+        <div className="divide-y divide-line-soft">
           <Toggle label="Auto emission calculation" description="Compute CO₂e automatically on carbon entries"
             checked={form.autoEmissionCalc} disabled={!isAdmin}
             onChange={(v) => setForm({ ...form, autoEmissionCalc: v })} />
@@ -223,7 +223,7 @@ export default function EsgConfigPage() {
       </section>
 
       {error && (
-        <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 mb-4">
+        <div className="text-sm text-pill-red-fg bg-pill-red-bg border border-pill-red-fg/30 rounded-lg px-3 py-2 mb-4">
           {error}
         </div>
       )}
@@ -237,8 +237,8 @@ export default function EsgConfigPage() {
           >
             {save.isPending ? 'Saving…' : 'Save Configuration'}
           </button>
-          {saved && <span className="text-sm text-green-700">Saved ✓</span>}
-          {!sumValid && <span className="text-sm text-red-600">Fix weights before saving</span>}
+          {saved && <span className="text-sm text-pill-green-fg">Saved ✓</span>}
+          {!sumValid && <span className="text-sm text-pill-red-fg">Fix weights before saving</span>}
         </div>
       )}
     </div>

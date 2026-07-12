@@ -85,15 +85,15 @@ export default function NotificationsPage() {
 
   return (
     <div className="max-w-2xl">
-      <h1 className="text-3xl font-bold text-gray-900">Notifications</h1>
-      <p className="text-sm text-gray-600 mt-1 mb-8">Your alerts and delivery preferences.</p>
+      <h1 className="text-3xl font-bold text-ink">Notifications</h1>
+      <p className="text-sm text-ink-2 mt-1 mb-8">Your alerts and delivery preferences.</p>
 
       {/* Notification settings (toggle subset of esg_config) */}
-      <section className="bg-white p-6 rounded-lg border border-gray-200 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-2">Notification Settings</h2>
+      <section className="bg-surface p-6 rounded-lg border border-line mb-6">
+        <h2 className="text-lg font-semibold text-ink mb-2">Notification Settings</h2>
         {form ? (
           <>
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-line-soft">
               <Toggle
                 label="Email alerts"
                 description="Send notifications to your email"
@@ -118,33 +118,33 @@ export default function NotificationsPage() {
                 >
                   {save.isPending ? 'Saving…' : 'Save Settings'}
                 </button>
-                {saved && <span className="text-sm text-green-700">Saved ✓</span>}
+                {saved && <span className="text-sm text-pill-green-fg">Saved ✓</span>}
               </div>
             ) : (
-              <p className="text-xs text-gray-500 mt-3">Admin access required to change these.</p>
+              <p className="text-xs text-ink-2 mt-3">Admin access required to change these.</p>
             )}
           </>
         ) : (
-          <p className="text-sm text-gray-500">Loading settings…</p>
+          <p className="text-sm text-ink-2">Loading settings…</p>
         )}
       </section>
 
       {/* Notification feed */}
-      <section className="bg-white p-6 rounded-lg border border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900 mb-2">Your Notifications</h2>
+      <section className="bg-surface p-6 rounded-lg border border-line">
+        <h2 className="text-lg font-semibold text-ink mb-2">Your Notifications</h2>
         {items.length === 0 ? (
-          <p className="text-sm text-gray-500 py-4">No notifications yet.</p>
+          <p className="text-sm text-ink-2 py-4">No notifications yet.</p>
         ) : (
-          <ul className="divide-y divide-gray-100">
+          <ul className="divide-y divide-line-soft">
             {items.map((n) => (
-              <li key={n.id} className={`py-3 ${n.read ? '' : 'bg-brand-primary/5 -mx-6 px-6'}`}>
+              <li key={n.id} className={`py-3 ${n.read ? '' : 'bg-accent-soft -mx-6 px-6'}`}>
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-sm font-medium text-gray-900">{n.title}</p>
-                    {n.body && <p className="text-xs text-gray-600 mt-0.5">{n.body}</p>}
+                    <p className="text-sm font-medium text-ink">{n.title}</p>
+                    {n.body && <p className="text-xs text-ink-2 mt-0.5">{n.body}</p>}
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
-                    <span className="text-xs text-gray-400">{timeAgo(n.createdAt)}</span>
+                    <span className="text-xs text-faint">{timeAgo(n.createdAt)}</span>
                     {!n.read && (
                       <button
                         onClick={() => markRead.mutate(n.id)}
