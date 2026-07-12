@@ -1,36 +1,133 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌱 EcoSphere — ESG Management Platform
 
-## Getting Started
+EcoSphere unifies **environmental data**, **employee action**, and **gamified engagement** into a single system of record, topped with a live **department ESG score**. Built for the Odoo Hackathon 2026.
 
-First, run the development server:
+## The problem it solves
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Most organizations track ESG in scattered spreadsheets: carbon in one file, CSR sign-ups in another, policy sign-offs in email, audits in a PDF. There's no single score, no accountability loop, and no incentive for employees to participate. EcoSphere makes ESG **operational** — every carbon entry, CSR participation, policy acknowledgement, and challenge feeds one weighted department score, and employees earn XP, badges, and rewards for acting sustainably.
+
+**Demo in one line:** approve a participation → watch the ESG score move.
+
+## Key features
+
+- **ESG scoring engine** — a `ScoreProvider` fan-in aggregates environmental, social, and governance signals per department, weighted (0.4 / 0.3 / 0.3) into a 0–100 score.
+- **Gamification loop** — challenges and CSR activities award **XP** (lifetime, drives levels + leaderboard) and **points** (spendable on rewards); badges auto-award at XP/challenge thresholds.
+- **RBAC** — six roles (Admin, ESG Manager, HR Manager, Auditor, Compliance Officer, Employee) with a per-entity create/read/update/delete/approve permission matrix.
+- **Governance & compliance** — policies with acknowledgements, audits with owner-assigned, due-dated compliance issues (overdue flagging).
+- **4 standard reports** — Environmental, Social, Governance, ESG Summary.
+
+## Tech stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 15 (App Router), TypeScript (strict) |
+| Styling | Tailwind CSS, shadcn/ui |
+| ORM | Drizzle ORM |
+| Database | Neon serverless Postgres (HTTP driver) |
+| Auth | Auth.js v5 (Credentials + JWT) |
+| Validation | Zod |
+| Data fetching | TanStack Query |
+| Charts | Recharts |
+| Icons | lucide-react |
+
+## Architecture
+
+```mermaid
+flowchart LR
+  UI[Next.js App Router UI] --> API[API Routes]
+  API -->|withAuth + requirePermission| SVC[Services]
+  SVC --> ORM[Drizzle ORM]
+  ORM --> DB[(Neon Postgres)]
+  subgraph Scoring
+    EP[Environmental Provider] --> SE[Score Engine]
+    SP[Social Provider] --> SE
+    GP[Governance Provider] --> SE
+  end
+  SVC --> SE
+  SE -->|0..100 weighted| DASH[Dashboard / Leaderboard]
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Every API route is wrapped in `withAuth()` and gated by `requirePermission()`. Domain modules register a `ScoreProvider`; the score engine fans them in per pillar and applies the configured weights.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Getting started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Prerequisites
 
-## Learn More
+- Node.js 18+
+- A [Neon](https://neon.tech) Postgres database (free tier works)
 
-To learn more about Next.js, take a look at the following resources:
+### Setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+git clone https://github.com/ShivamPatel145/EcoSphere-ESG-Management-Platform.git
+cd EcoSphere-ESG-Management-Platform
+npm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# configure environment
+cp .env.example .env
+# edit .env and fill in:
+#   DATABASE_URL  — your Neon connection string
+#   AUTH_SECRET   — generate with: openssl rand -base64 32
 
-## Deploy on Vercel
+npm run db:push    # create tables in Neon
+npm run db:seed    # load demo data
+npm run dev        # http://localhost:3000
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Login credentials
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+All demo accounts use the password **`demo1234`**.
+
+| Email | Role |
+|-------|------|
+| admin@ecosphere.dev | ADMIN |
+| esg@ecosphere.dev | ESG_MANAGER |
+| hr@ecosphere.dev | HR_MANAGER |
+| auditor@ecosphere.dev | AUDITOR |
+| compliance@ecosphere.dev | COMPLIANCE_OFFICER |
+| priya@ecosphere.dev | EMPLOYEE |
+| karan@ecosphere.dev | EMPLOYEE |
+| aditi@ecosphere.dev | EMPLOYEE |
+
+## Project structure
+
+```
+src/
+├── app/
+│   ├── (auth)/           # sign-in
+│   ├── (app)/            # protected app shell + all module routes
+│   └── api/              # health, auth, module APIs
+├── components/
+│   ├── app-shell/        # sidebar, topbar
+│   ├── shared/           # DataTable, RecordDrawer, FormField, StatusPill, ...
+│   └── ui/               # shadcn primitives
+├── db/                   # schema (FROZEN), client, seed
+├── server/               # permissions, api-helpers, scoring engine
+└── lib/                  # levels helper
+```
+
+## Team & module ownership
+
+| Owner | Modules |
+|-------|---------|
+| **Shivam** | Platform, auth, RBAC, scoring, dashboard, notifications, departments, esg-config, schema |
+| **Mitesh** | Environmental (emission factors, product profiles, carbon, goals) + categories |
+| **Hetvi** | Social + Governance + Approval Queue |
+| **Shreya** | Gamification + Reports |
+
+Contributor workflow: rebase on `dev`, open PRs into `dev` (never `main`), conventional commits, no squash. Full agent guidance in [CLAUDE.md](./CLAUDE.md).
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server |
+| `npm run build` | Production build / type-check |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
+| `npm run db:push` | Push schema to Neon |
+| `npm run db:seed` | Seed demo data |
+
+## License
+
+MIT
