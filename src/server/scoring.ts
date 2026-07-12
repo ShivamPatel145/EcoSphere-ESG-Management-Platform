@@ -314,7 +314,11 @@ export function registerProviders() {
   const { environmentalScoreProvider } = require('@/server/services/score/environmental')
   registerProvider(environmentalScoreProvider) // Mitesh
 
-  // --- STUBS (replace with your real provider) ---
-  registerProvider(socialScoreStub) // Hetvi — replace with real social provider
-  registerProvider(governanceScoreStub) // Hetvi — replace with real governance provider
+  // --- REAL PROVIDERS (Hetvi) ---
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { socialScoreProvider } = require('@/server/services/score/social')
+  registerProvider(socialScoreProvider) // Hetvi
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { governanceScoreProvider } = require('@/server/services/score/governance')
+  registerProvider(governanceScoreProvider) // Hetvi
 }
