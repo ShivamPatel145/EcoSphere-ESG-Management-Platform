@@ -19,6 +19,8 @@ import {
   X,
 } from 'lucide-react'
 import { getLevel } from '@/lib/levels'
+import { canViewRoute } from '@/lib/route-access'
+import type { Role } from '@/lib/roles'
 
 export interface NavCounts {
   environmental: number
@@ -106,7 +108,12 @@ function NavContent({
   session: Session
 }) {
   const pathname = usePathname()
-  const user = session.user as { name?: string | null; totalXp?: number }
+  const user = session.user as { name?: string | null; totalXp?: number; role?: Role }
+  const role = (user?.role ?? 'EMPLOYEE') as Role
+  // Show only the links this role may open; drop any group left empty.
+  const visibleGroups = navGroups
+    .map((g) => ({ ...g, items: g.items.filter((it) => canViewRoute(role, it.href)) }))
+    .filter((g) => g.items.length > 0)
   const xp = user?.totalXp ?? 0
   const level = getLevel(xp)
   const initials =
@@ -149,7 +156,7 @@ function NavContent({
       </div>
 
       <nav className="flex-1 space-y-4 overflow-y-auto px-3 pb-3 pt-1">
-        {navGroups.map((group) => {
+        {visibleGroups.map((group) => {
           const count = group.countKey ? counts[group.countKey] : undefined
           return (
             <div key={group.title} className="flex flex-col gap-0.5">

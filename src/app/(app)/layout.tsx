@@ -9,7 +9,9 @@ import {
   employeeParticipations,
 } from '@/db/schema'
 import { AppShell } from '@/components/app-shell/app-shell'
+import { RouteGuard } from '@/components/app-shell/route-guard'
 import type { NavCounts } from '@/components/app-shell/sidebar'
+import type { Role } from '@/lib/roles'
 
 async function getNavCounts(): Promise<NavCounts> {
   const zero: NavCounts = { environmental: 0, social: 0, governance: 0, gamification: 0 }
@@ -42,9 +44,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   if (!session) redirect('/sign-in')
 
   const counts = await getNavCounts()
+  const role = ((session.user as { role?: Role }).role ?? 'EMPLOYEE') as Role
 
   return (
     <AppShell session={session} counts={counts}>
+      <RouteGuard role={role} />
       {children}
     </AppShell>
   )
