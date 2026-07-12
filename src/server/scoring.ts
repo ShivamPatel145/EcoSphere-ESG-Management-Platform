@@ -24,7 +24,14 @@
 // ---------------------------------------------------------------
 // =============================================================
 
+import { db } from '@/db'
+import { departments, departmentScores, esgConfig } from '@/db/schema'
+import { eq, sql } from 'drizzle-orm'
+
 export type ScorePeriod = string // "2026-07"
+
+/** Canonical default period for the hackathon demo data. */
+export const DEFAULT_PERIOD: ScorePeriod = '2026-07'
 
 export interface ScoreBreakdown {
   environmental: number // 0..100
@@ -96,6 +103,135 @@ export async function getScore(
     breakdown.governance * weights.governance
 
   return { total: Math.round(total * 100) / 100, breakdown }
+}
+
+// =============================================================
+// ENGINE — recalculate + persist department_scores, plus overall.
+// =============================================================
+const clamp100 = (n: number) => Math.max(0, Math.min(100, n))
+const round2 = (n: number) => Math.round(n * 100) / 100
+
+/**
+ * Read live pillar weights from the esg_config singleton, falling back
+ * to DEFAULT_WEIGHTS when the table is empty (never throws).
+ */
+export async function getWeights(): Promise<ScoreBreakdown> {
+  const rows = await db.select().from(esgConfig).limit(1)
+  const cfg = rows[0]
+  if (!cfg) return { ...DEFAULT_WEIGHTS }
+  return {
+    environmental: cfg.weightEnvironmental,
+    social: cfg.weightSocial,
+    governance: cfg.weightGovernance,
+  }
+}
+
+export interface DepartmentScoreRow {
+  departmentId: string
+  name: string
+  code: string
+  environmental: number
+  social: number
+  governance: number
+  total: number
+  rank: number
+}
+
+/**
+ * Recalculate ESG scores for every ACTIVE department in a period.
+ * For each department: fan in across registered providers (stubs return
+ * 0 until real ones land), clamp each pillar 0..100, weight by esg_config,
+ * UPSERT into department_scores on (departmentId, period), then rank
+ * 1..n by total desc. Safe on empty tables (returns []).
+ */
+export async function recalculateAll(
+  period: ScorePeriod = DEFAULT_PERIOD,
+): Promise<DepartmentScoreRow[]> {
+  registerProviders() // idempotent — ensure stubs/real providers are wired
+
+  const weights = await getWeights()
+  const activeDepts = await db
+    .select()
+    .from(departments)
+    .where(eq(departments.status, 'ACTIVE'))
+
+  if (activeDepts.length === 0) return []
+
+  // Compute breakdown + total per department.
+  const computed = await Promise.all(
+    activeDepts.map(async (dept) => {
+      const { breakdown } = await getScore(dept.id, period, weights)
+      const environmental = clamp100(breakdown.environmental)
+      const social = clamp100(breakdown.social)
+      const governance = clamp100(breakdown.governance)
+      const total = clamp100(
+        environmental * weights.environmental +
+          social * weights.social +
+          governance * weights.governance,
+      )
+      return {
+        departmentId: dept.id,
+        name: dept.name,
+        code: dept.code,
+        environmental: round2(environmental),
+        social: round2(social),
+        governance: round2(governance),
+        total: round2(total),
+      }
+    }),
+  )
+
+  // Rank 1..n by total desc (stable: tie-break by name for determinism).
+  computed.sort((a, b) => b.total - a.total || a.name.localeCompare(b.name))
+  const ranked: DepartmentScoreRow[] = computed.map((c, i) => ({
+    ...c,
+    rank: i + 1,
+  }))
+
+  // UPSERT each row on the (departmentId, period) unique index.
+  for (const r of ranked) {
+    await db
+      .insert(departmentScores)
+      .values({
+        departmentId: r.departmentId,
+        period,
+        environmental: r.environmental,
+        social: r.social,
+        governance: r.governance,
+        total: r.total,
+        rank: r.rank,
+      })
+      .onConflictDoUpdate({
+        target: [departmentScores.departmentId, departmentScores.period],
+        set: {
+          environmental: r.environmental,
+          social: r.social,
+          governance: r.governance,
+          total: r.total,
+          rank: r.rank,
+          computedAt: sql`now()`,
+        },
+      })
+  }
+
+  return ranked
+}
+
+/**
+ * Overall company ESG score for a period = weighted average of department
+ * totals (equal-weighted across departments). Reads persisted rows so it
+ * reflects the last recalculate. Returns 0 when no scores exist.
+ */
+export async function getOverall(
+  period: ScorePeriod = DEFAULT_PERIOD,
+): Promise<number> {
+  const rows = await db
+    .select({ total: departmentScores.total })
+    .from(departmentScores)
+    .where(eq(departmentScores.period, period))
+  if (rows.length === 0) return 0
+  const avg = rows.reduce((a, r) => a + r.total, 0) / rows.length
+  return round2(avg)
 }
 
 // =============================================================
