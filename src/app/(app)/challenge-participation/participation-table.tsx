@@ -25,31 +25,31 @@ export function ParticipationTable({ data, isAdmin }: { data: any[], isAdmin: bo
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div className="bg-surface rounded-xl shadow-[0_1px_2px_rgba(31,41,55,.04)] border border-line overflow-hidden">
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="bg-gray-50 border-b border-gray-200">
-            <th className="px-6 py-4 font-semibold text-gray-600">Employee</th>
-            <th className="px-6 py-4 font-semibold text-gray-600">Challenge</th>
-            <th className="px-6 py-4 font-semibold text-gray-600 text-center">Status</th>
-            <th className="px-6 py-4 font-semibold text-gray-600">Proof</th>
-            {isAdmin && <th className="px-6 py-4 font-semibold text-gray-600 text-right">Actions</th>}
+          <tr className="bg-canvas border-b border-line">
+            <th className="px-6 py-4 font-semibold text-ink-2">Employee</th>
+            <th className="px-6 py-4 font-semibold text-ink-2">Challenge</th>
+            <th className="px-6 py-4 font-semibold text-ink-2 text-center">Status</th>
+            <th className="px-6 py-4 font-semibold text-ink-2">Proof</th>
+            {isAdmin && <th className="px-6 py-4 font-semibold text-ink-2 text-right">Actions</th>}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-line-soft">
           {data.length === 0 ? (
             <tr>
-              <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+              <td colSpan={5} className="px-6 py-12 text-center text-ink-2">
                 No participations found. When employees join challenges, they will appear here.
               </td>
             </tr>
           ) : (
             data.map((row) => (
-              <tr key={row.id} className="hover:bg-gray-50/50 transition-colors">
-                <td className="px-6 py-4 font-medium text-gray-900">{row.userName}</td>
+              <tr key={row.id} className="hover:bg-hover transition-colors">
+                <td className="px-6 py-4 font-medium text-ink">{row.userName}</td>
                 <td className="px-6 py-4">
-                  <div className="text-gray-900 font-medium">{row.challengeTitle}</div>
-                  <div className="text-xs text-gray-500">{row.challengeXp} XP Reward</div>
+                  <div className="text-ink font-medium">{row.challengeTitle}</div>
+                  <div className="text-xs text-ink-2">{row.challengeXp} XP Reward</div>
                 </td>
                 <td className="px-6 py-4 text-center">
                   <StatusBadge status={row.status} />
@@ -58,7 +58,7 @@ export function ParticipationTable({ data, isAdmin }: { data: any[], isAdmin: bo
                   {row.proofUrl ? (
                     <ProofButton url={row.proofUrl} label="View Proof" />
                   ) : (
-                    <span className="text-gray-400 text-sm">Not submitted</span>
+                    <span className="text-faint text-sm">Not submitted</span>
                   )}
                 </td>
                 {isAdmin && (
@@ -67,7 +67,7 @@ export function ParticipationTable({ data, isAdmin }: { data: any[], isAdmin: bo
                       <>
                         <Button 
                           size="sm" 
-                          className="bg-green-600 hover:bg-green-700 text-white"
+                          className="bg-brand-primary hover:bg-brand-primary-dark text-white"
                           disabled={processingId === row.id}
                           onClick={() => onApprove(row.id)}
                         >
@@ -83,9 +83,9 @@ export function ParticipationTable({ data, isAdmin }: { data: any[], isAdmin: bo
                         </Button>
                       </>
                     ) : row.status === "COMPLETED" ? (
-                      <span className="text-xs text-gray-500">Awarded {row.xpAwarded} XP</span>
+                      <span className="text-xs text-ink-2">Awarded {row.xpAwarded} XP</span>
                     ) : (
-                      <span className="text-xs text-gray-400">Waiting for proof</span>
+                      <span className="text-xs text-faint">Waiting for proof</span>
                     )}
                   </td>
                 )}
@@ -99,11 +99,11 @@ export function ParticipationTable({ data, isAdmin }: { data: any[], isAdmin: bo
 }
 
 function StatusBadge({ status }: { status: string }) {
-  let bg = "bg-gray-100 text-gray-800";
-  if (status === "JOINED") bg = "bg-blue-100 text-blue-800";
-  if (status === "PROOF_SUBMITTED") bg = "bg-yellow-100 text-yellow-800 animate-pulse";
-  if (status === "COMPLETED") bg = "bg-green-100 text-green-800";
-  if (status === "REJECTED") bg = "bg-red-100 text-red-800";
+  let bg = "bg-surface-2 text-ink-2";
+  if (status === "JOINED") bg = "bg-surface-2 text-ink-2";
+  if (status === "PROOF_SUBMITTED") bg = "bg-pill-amber-bg text-pill-amber-fg animate-pulse";
+  if (status === "COMPLETED") bg = "bg-pill-green-bg text-pill-green-fg";
+  if (status === "REJECTED") bg = "bg-pill-red-bg text-pill-red-fg";
 
   return (
     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${bg}`}>

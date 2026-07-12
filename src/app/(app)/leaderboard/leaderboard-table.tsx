@@ -5,7 +5,7 @@ import { LeaderboardRow } from "./actions";
 export function LeaderboardTable({ data }: { data: LeaderboardRow[] }) {
   if (data.length === 0) {
     return (
-      <div className="flex items-center justify-center h-64 text-gray-500">
+      <div className="flex items-center justify-center h-64 text-ink-2">
         No participants yet. Join a challenge to climb the ranks!
       </div>
     );
@@ -62,36 +62,36 @@ export function LeaderboardTable({ data }: { data: LeaderboardRow[] }) {
 
       {/* Ranks 4+ Table */}
       {rest.length > 0 && (
-        <div className="overflow-hidden border border-gray-200 rounded-xl">
+        <div className="overflow-hidden border border-line rounded-xl">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="px-6 py-4 font-semibold text-gray-600 w-24 text-center">Rank</th>
-                <th className="px-6 py-4 font-semibold text-gray-600">Employee</th>
-                <th className="px-6 py-4 font-semibold text-gray-600">Level</th>
-                <th className="px-6 py-4 font-semibold text-gray-600 text-right">Total XP</th>
-                <th className="px-6 py-4 font-semibold text-gray-600 text-right">Badges</th>
+              <tr className="bg-canvas border-b border-line">
+                <th className="px-6 py-4 font-semibold text-ink-2 w-24 text-center">Rank</th>
+                <th className="px-6 py-4 font-semibold text-ink-2">Employee</th>
+                <th className="px-6 py-4 font-semibold text-ink-2">Level</th>
+                <th className="px-6 py-4 font-semibold text-ink-2 text-right">Total XP</th>
+                <th className="px-6 py-4 font-semibold text-ink-2 text-right">Badges</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-line-soft">
               {rest.map((user, idx) => (
-                <tr key={user.id} className="hover:bg-gray-50/80 transition-colors">
-                  <td className="px-6 py-4 text-center font-medium text-gray-500">#{idx + 4}</td>
+                <tr key={user.id} className="hover:bg-hover transition-colors">
+                  <td className="px-6 py-4 text-center font-medium text-ink-2">#{idx + 4}</td>
                   <td className="px-6 py-4">
-                    <div className="font-semibold text-gray-900">{user.name}</div>
+                    <div className="font-semibold text-ink">{user.name}</div>
                     {user.departmentName && (
-                      <div className="text-xs text-gray-500">{user.departmentName}</div>
+                      <div className="text-xs text-ink-2">{user.departmentName}</div>
                     )}
                   </td>
                   <td className="px-6 py-4">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#4F7A5A]/10 text-[#33503C]">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-primary/10 text-ink">
                       {user.levelName}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-right font-mono font-medium text-[#33503C]">
+                  <td className="px-6 py-4 text-right font-mono font-medium text-ink">
                     {user.totalXp.toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 text-right font-medium text-gray-700">
+                  <td className="px-6 py-4 text-right font-medium text-ink">
                     {user.badgeCount}
                   </td>
                 </tr>
@@ -123,18 +123,18 @@ function PodiumCard({
       </div>
 
       <div className="mt-4 text-center">
-        <h3 className="font-bold text-gray-900 text-lg line-clamp-1">{user.name}</h3>
-        <div className="text-xs text-gray-700 opacity-80 mb-2">{user.departmentName || "General"}</div>
-        
-        <span className="inline-block px-2 py-1 bg-white/60 backdrop-blur-sm rounded text-xs font-semibold text-gray-800 mb-4 shadow-sm">
+        <h3 className="font-bold text-ink text-lg line-clamp-1">{user.name}</h3>
+        <div className="text-xs text-ink opacity-80 mb-2">{user.departmentName || "General"}</div>
+
+        <span className="inline-block px-2 py-1 bg-surface/60 backdrop-blur-sm rounded text-xs font-semibold text-ink mb-4 shadow-[0_1px_2px_rgba(31,41,55,.04)]">
           {user.levelName}
         </span>
-        
-        <div className="font-mono text-2xl font-black text-gray-900 tracking-tight">
-          {user.totalXp.toLocaleString()} <span className="text-sm font-bold text-gray-700">XP</span>
+
+        <div className="font-mono text-2xl font-black text-ink tracking-tight">
+          {user.totalXp.toLocaleString()} <span className="text-sm font-bold text-ink">XP</span>
         </div>
 
-        <div className="mt-2 text-xs font-medium text-gray-800 flex items-center justify-center gap-1">
+        <div className="mt-2 text-xs font-medium text-ink flex items-center justify-center gap-1">
           🏅 {user.badgeCount} Badges
         </div>
       </div>

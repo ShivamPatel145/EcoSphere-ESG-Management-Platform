@@ -88,7 +88,7 @@ export function KanbanBoard({ initialChallenges, categories, badges }: {
   return (
     <div className="h-full flex flex-col">
       <div className="mb-6">
-        <Button onClick={() => setDrawerOpen(true)} className="bg-[#33503C] hover:bg-[#33503C]/90 text-white">
+        <Button onClick={() => setDrawerOpen(true)} className="bg-brand-primary-darker hover:bg-brand-primary-dark text-white">
           + Create Challenge
         </Button>
       </div>
@@ -106,13 +106,13 @@ export function KanbanBoard({ initialChallenges, categories, badges }: {
             }}
             onDrop={() => handleDrop(col)}
             className={`min-w-[300px] w-[300px] flex flex-col rounded-xl border transition-colors ${
-              overCol === col ? "border-2 border-[#33503C] bg-[#33503C]/5" : "border-gray-200 bg-gray-50/50"
+              overCol === col ? "border-2 border-brand-primary-darker bg-tint-green" : "border-line bg-canvas"
             }`}
           >
-            <div className="p-4 border-b border-gray-200 bg-gray-100/50 rounded-t-xl">
-              <h3 className="font-semibold text-gray-700 flex items-center justify-between">
+            <div className="p-4 border-b border-line bg-surface-2 rounded-t-xl">
+              <h3 className="font-semibold text-ink flex items-center justify-between">
                 {col.replace("_", " ")}
-                <span className="text-xs bg-gray-200 text-gray-600 py-0.5 px-2 rounded-full">
+                <span className="text-xs bg-surface-2 text-ink-2 py-0.5 px-2 rounded-full">
                   {grouped[col].length}
                 </span>
               </h3>
@@ -131,28 +131,28 @@ export function KanbanBoard({ initialChallenges, categories, badges }: {
                     setDragId(null);
                     setOverCol(null);
                   }}
-                  className={`bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing ${
-                    dragId === challenge.id ? "opacity-50 ring-2 ring-[#33503C]" : ""
+                  className={`bg-surface p-4 rounded-lg shadow-[0_1px_2px_rgba(31,41,55,.04)] border border-line-soft hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing ${
+                    dragId === challenge.id ? "opacity-50 ring-2 ring-brand-primary-darker" : ""
                   }`}
                 >
                   <div className="flex justify-between items-start mb-2">
-                    <span className="text-xs font-medium text-[#4F7A5A] bg-[#4F7A5A]/10 px-2 py-1 rounded">
+                    <span className="text-xs font-medium text-brand-primary bg-tint-green px-2 py-1 rounded">
                       {challenge.categoryName || "General"}
                     </span>
-                    <span className="text-xs text-amber-600 font-semibold flex items-center gap-1">
+                    <span className="text-xs text-pill-amber-fg font-semibold flex items-center gap-1">
                       ⭐ {challenge.xpReward} XP
                     </span>
                   </div>
-                  <h4 className="font-semibold text-gray-800 mb-1">{challenge.title}</h4>
-                  <p className="text-xs text-gray-500 line-clamp-2 mb-3">{challenge.description}</p>
-                  
-                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-50">
+                  <h4 className="font-semibold text-ink mb-1">{challenge.title}</h4>
+                  <p className="text-xs text-ink-2 line-clamp-2 mb-3">{challenge.description}</p>
+
+                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-line-soft">
                     {col === "DRAFT" ? (
-                      <button onClick={() => handleDelete(challenge.id)} className="text-xs text-red-500 hover:underline">
+                      <button onClick={() => handleDelete(challenge.id)} className="text-xs text-pill-red-fg hover:underline">
                         Delete
                       </button>
                     ) : (
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-faint">
                         {challenge.difficulty}
                       </span>
                     )}
@@ -160,7 +160,7 @@ export function KanbanBoard({ initialChallenges, categories, badges }: {
                     {col !== "ARCHIVED" && (
                       <button 
                         onClick={() => handleAdvanceStatus(challenge.id, challenge.status)}
-                        className="text-xs font-medium text-[#33503C] hover:underline flex items-center gap-1"
+                        className="text-xs font-medium text-brand-primary-darker hover:underline flex items-center gap-1"
                       >
                         Advance →
                       </button>
@@ -170,7 +170,7 @@ export function KanbanBoard({ initialChallenges, categories, badges }: {
               ))}
               
               {grouped[col].length === 0 && (
-                <div className="text-center p-6 text-gray-400 text-sm border-2 border-dashed border-gray-200 rounded-lg">
+                <div className="text-center p-6 text-faint text-sm border-2 border-dashed border-line rounded-lg">
                   No challenges here
                 </div>
               )}
@@ -188,19 +188,19 @@ export function KanbanBoard({ initialChallenges, categories, badges }: {
       >
         <form id="create-challenge-form" onSubmit={handleCreate} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-            <input name="title" required className="w-full border border-gray-300 rounded-md p-2 focus:ring-[#33503C] focus:border-[#33503C]" />
+            <label className="block text-sm font-medium text-ink mb-1">Title</label>
+            <input name="title" required className="w-full border border-input-line rounded-md p-2 focus:ring-brand-primary/15 focus:border-brand-primary" />
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-            <textarea name="description" rows={3} className="w-full border border-gray-300 rounded-md p-2 focus:ring-[#33503C] focus:border-[#33503C]" />
+            <label className="block text-sm font-medium text-ink mb-1">Description</label>
+            <textarea name="description" rows={3} className="w-full border border-input-line rounded-md p-2 focus:ring-brand-primary/15 focus:border-brand-primary" />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-              <select name="categoryId" required className="w-full border border-gray-300 rounded-md p-2 bg-white">
+              <label className="block text-sm font-medium text-ink mb-1">Category</label>
+              <select name="categoryId" required className="w-full border border-input-line rounded-md p-2 bg-surface">
                 <option value="">Select...</option>
                 {categories.map(c => (
                   <option key={c.id} value={c.id}>{c.name}</option>
@@ -208,8 +208,8 @@ export function KanbanBoard({ initialChallenges, categories, badges }: {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">ESG Dimension</label>
-              <select name="esgCategory" required className="w-full border border-gray-300 rounded-md p-2 bg-white">
+              <label className="block text-sm font-medium text-ink mb-1">ESG Dimension</label>
+              <select name="esgCategory" required className="w-full border border-input-line rounded-md p-2 bg-surface">
                 <option value="ENVIRONMENTAL">Environmental</option>
                 <option value="SOCIAL">Social</option>
                 <option value="GOVERNANCE">Governance</option>
@@ -219,16 +219,16 @@ export function KanbanBoard({ initialChallenges, categories, badges }: {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Difficulty</label>
-              <select name="difficulty" required className="w-full border border-gray-300 rounded-md p-2 bg-white">
+              <label className="block text-sm font-medium text-ink mb-1">Difficulty</label>
+              <select name="difficulty" required className="w-full border border-input-line rounded-md p-2 bg-surface">
                 <option value="EASY">Easy (100 XP)</option>
                 <option value="MEDIUM">Medium (200 XP)</option>
                 <option value="HARD">Hard (300 XP)</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Badge (Optional)</label>
-              <select name="badgeId" className="w-full border border-gray-300 rounded-md p-2 bg-white">
+              <label className="block text-sm font-medium text-ink mb-1">Badge (Optional)</label>
+              <select name="badgeId" className="w-full border border-input-line rounded-md p-2 bg-surface">
                 <option value="">None</option>
                 {badges.map(b => (
                   <option key={b.id} value={b.id}>{b.name}</option>
@@ -238,8 +238,8 @@ export function KanbanBoard({ initialChallenges, categories, badges }: {
           </div>
 
           <div className="flex items-center gap-2 pt-2">
-            <input type="checkbox" id="evidenceRequired" name="evidenceRequired" defaultChecked className="rounded text-[#33503C] focus:ring-[#33503C]" />
-            <label htmlFor="evidenceRequired" className="text-sm text-gray-700">Proof of completion required</label>
+            <input type="checkbox" id="evidenceRequired" name="evidenceRequired" defaultChecked className="rounded text-brand-primary-darker focus:ring-brand-primary/15" />
+            <label htmlFor="evidenceRequired" className="text-sm text-ink">Proof of completion required</label>
           </div>
 
           {/* Hidden submit button triggered by RecordDrawer's footer */}

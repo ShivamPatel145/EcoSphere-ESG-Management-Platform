@@ -22,7 +22,7 @@ export default async function RewardsPage() {
   ]);
 
   return (
-    <div className="flex flex-col h-full bg-[#f8fafc] overflow-y-auto">
+    <div className="flex flex-col h-full bg-canvas overflow-y-auto">
       <header className="px-8 py-10 bg-[#33503C] text-white">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>

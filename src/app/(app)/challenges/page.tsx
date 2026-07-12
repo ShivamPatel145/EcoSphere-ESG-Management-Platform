@@ -16,11 +16,11 @@ export default async function ChallengesPage() {
   ]);
 
   return (
-    <div className="flex flex-col h-full bg-[#f8fafc]">
-      <header className="flex items-center justify-between px-8 py-6 bg-white border-b border-gray-200">
+    <div className="flex flex-col h-full bg-canvas">
+      <header className="flex items-center justify-between px-8 py-6 bg-surface border-b border-line">
         <div>
-          <h1 className="text-2xl font-semibold text-[#33503C]">Challenges Kanban</h1>
-          <p className="text-sm text-gray-500 mt-1">Manage gamified challenges across their lifecycle.</p>
+          <h1 className="text-[20px] font-semibold text-ink">Challenges Kanban</h1>
+          <p className="text-[12.5px] text-faint mt-1">Manage gamified challenges across their lifecycle.</p>
         </div>
       </header>
       
