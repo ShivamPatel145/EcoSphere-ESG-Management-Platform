@@ -29,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable} h-full antialiased`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${fraunces.variable} h-full antialiased`}>
       <head>
         {/* Apply the persisted theme before paint to avoid a flash of the
             wrong palette. Presentational only — reads localStorage, sets a

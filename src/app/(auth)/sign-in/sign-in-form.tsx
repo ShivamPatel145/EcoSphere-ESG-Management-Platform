@@ -13,13 +13,11 @@ export function SignInForm() {
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [formError, setFormError] = useState('')
-  const [info, setInfo] = useState('')
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setFormError('')
-    setInfo('')
 
     const parsed = signInSchema.safeParse({ email, password })
     if (!parsed.success) {
@@ -36,8 +34,11 @@ export function SignInForm() {
         redirect: false,
       })
 
-      if (!result?.ok) {
-        setFormError('Invalid email or password. Please try again.')
+      // next-auth/react returns { error, ok, ... } where `ok` is just the HTTP
+      // status of the callback — it is `true` (200) even on bad credentials.
+      // Failure is signalled by `error` ("CredentialsSignin"), so check that.
+      if (result?.error || !result?.ok) {
+        setFormError('Incorrect password. Please enter the correct password and try again.')
         return
       }
 
@@ -53,7 +54,6 @@ export function SignInForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       {formError && <Banner tone="error">{formError}</Banner>}
-      {info && <Banner tone="info">{info}</Banner>}
 
       <TextField
         label="Work Email"
@@ -66,28 +66,15 @@ export function SignInForm() {
         disabled={loading}
       />
 
-      <div>
-        <PasswordField
-          label="Password"
-          autoComplete="current-password"
-          placeholder="••••••••"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          error={errors.password}
-          disabled={loading}
-        />
-        <div className="mt-1.5 text-right">
-          <button
-            type="button"
-            onClick={() =>
-              setInfo('Password reset is coming soon — contact your administrator to recover access.')
-            }
-            className="text-[11.5px] font-medium text-brand-primary transition-colors hover:text-brand-primary-dark"
-          >
-            Forgot password?
-          </button>
-        </div>
-      </div>
+      <PasswordField
+        label="Password"
+        autoComplete="current-password"
+        placeholder="••••••••"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        error={errors.password}
+        disabled={loading}
+      />
 
       <button
         type="submit"
